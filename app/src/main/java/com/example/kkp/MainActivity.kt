@@ -18,6 +18,8 @@ import com.example.kkp.api.SessionManager
 import com.example.kkp.ui.screens.AssetScreen
 import com.example.kkp.ui.screens.DashboardScreen
 import com.example.kkp.ui.screens.LoginScreen
+import com.example.kkp.ui.screens.ProfileScreen
+import com.example.kkp.ui.screens.RentalScreen
 import com.example.kkp.ui.theme.KKPTheme
 import com.example.kkp.viewmodel.AuthViewModel
 
@@ -126,33 +128,16 @@ fun KKPApp() {
         }
         
         composable("rental") {
-            // TODO: Implement RentalScreen
-            DashboardScreen(
+            RentalScreen(
+                onNavigateToProfile = {
+                    navController.navigate("profile")
+                },
                 onLogout = {
                     authViewModel.logout()
                     navController.navigate("login") {
                         popUpTo("dashboard") { inclusive = true }
                     }
-                },
-                onNavigateToAssets = {
-                    navController.navigate("assets")
-                },
-                onNavigateToProjects = {
-                    navController.navigate("projects")
-                },
-                onNavigateToRental = {
-                    navController.navigate("rental")
-                },
-                onNavigateToPengiriman = {
-                    navController.navigate("pengiriman")
-                },
-                onNavigateToTagihan = {
-                    navController.navigate("tagihan")
-                },
-                onNavigateToProfile = {
-                    navController.navigate("profile")
-                },
-                authViewModel = authViewModel
+                }
             )
         }
         
@@ -219,33 +204,16 @@ fun KKPApp() {
         }
         
         composable("profile") {
-            // TODO: Implement ProfileScreen
-            DashboardScreen(
+            ProfileScreen(
+                onNavigateBack = {
+                    navController.popBackStack()
+                },
                 onLogout = {
                     authViewModel.logout()
                     navController.navigate("login") {
                         popUpTo("dashboard") { inclusive = true }
                     }
-                },
-                onNavigateToAssets = {
-                    navController.navigate("assets")
-                },
-                onNavigateToProjects = {
-                    navController.navigate("projects")
-                },
-                onNavigateToRental = {
-                    navController.navigate("rental")
-                },
-                onNavigateToPengiriman = {
-                    navController.navigate("pengiriman")
-                },
-                onNavigateToTagihan = {
-                    navController.navigate("tagihan")
-                },
-                onNavigateToProfile = {
-                    navController.navigate("profile")
-                },
-                authViewModel = authViewModel
+                }
             )
         }
     }

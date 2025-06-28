@@ -1,0 +1,16 @@
+<resources>
+    <!-- Opsi filter untuk Spinner -->
+    <string-array name="filter_options">
+        <item>All</item>
+        <item>Ready</item>
+        <item>Rent</item>
+        <item>In Use</item>
+        <item>Maintenance</item>
+    </string-array>
+    <string-array name="condition_array">
+        <item>Normal</item>
+        <item>Rusak Ringan</item>
+        <item>Rusak Berat</item>
+    </string-array>
+
+</resources>

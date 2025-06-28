@@ -1,0 +1,145 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/red"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@drawable/bg_white_rounded"
+        android:padding="24dp"
+        android:layout_marginTop="32dp">
+
+        <!-- Judul -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Add New Asset"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:fontFamily="@font/poppins_semibold" />
+
+        <!-- Form Grid 2 Kolom -->
+        <GridLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:columnCount="2"
+            android:rowCount="5"
+            android:layout_marginTop="16dp"
+            android:columnOrderPreserved="false"
+            android:orientation="horizontal"
+            android:padding="4dp">
+
+            <!-- Merk -->
+            <EditText
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:hint="Merk*"
+                android:background="@drawable/bg_input"
+                android:padding="12dp"
+                android:layout_margin="8dp" />
+
+            <!-- Type -->
+            <EditText
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:hint="Type*"
+                android:background="@drawable/bg_input"
+                android:padding="12dp"
+                android:layout_margin="8dp" />
+
+            <!-- Serial Number -->
+            <EditText
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:hint="Serialnumber*"
+                android:background="@drawable/bg_input"
+                android:padding="12dp"
+                android:layout_margin="8dp" />
+
+            <!-- Spesifikasi -->
+            <EditText
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:hint="Spesifikasi*"
+                android:background="@drawable/bg_input"
+                android:padding="12dp"
+                android:layout_margin="8dp" />
+
+            <!-- Purchase Date -->
+            <EditText
+                android:id="@+id/purchaseDate"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:hint="Purchase Date*"
+                android:focusable="false"
+                android:background="@drawable/bg_input"
+                android:padding="12dp"
+                android:layout_margin="8dp"
+                android:drawableEnd="@drawable/ic_calendar" />
+
+            <!-- Purchase Price -->
+            <EditText
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:hint="Purchase Price*"
+                android:background="@drawable/bg_input"
+                android:padding="12dp"
+                android:layout_margin="8dp" />
+
+            <!-- Condition -->
+            <Spinner
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:background="@drawable/bg_input"
+                android:padding="12dp"
+                android:layout_margin="8dp"
+                android:entries="@array/condition_array" />
+
+        </GridLayout>
+
+        <!-- Note -->
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:hint="Note*"
+            android:background="@drawable/bg_input"
+            android:padding="12dp"
+            android:gravity="top"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="24dp" />
+
+        <!-- Tombol -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="end">
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Cancel"
+                android:backgroundTint="@color/light_grey"
+                android:textColor="@color/black"
+                android:layout_marginEnd="16dp" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Add Asset"
+                android:backgroundTint="@color/blue"
+                android:textColor="@color/white" />
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>

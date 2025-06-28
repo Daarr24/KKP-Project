@@ -1,0 +1,306 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <!-- Konten scrollable -->
+    <ScrollView
+        android:id="@+id/scrollContent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/bottomToolbar"
+        android:padding="16dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- Judul -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Rentals Inventory"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:fontFamily="@font/poppins_semibold"
+                android:textColor="@color/black"
+                android:layout_marginBottom="16dp" />
+
+            <!-- Statistik CardView -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="3"
+                android:layout_marginBottom="16dp"
+                android:gravity="center">
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="0dp"
+                    android:layout_height="100dp"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="8dp"
+                    android:elevation="4dp"
+                    android:backgroundTint="@color/blue"
+                    app:cardCornerRadius="12dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:padding="12dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Active Rental"
+                            android:textColor="@color/white"
+                            android:textSize="16sp"
+                            android:fontFamily="@font/poppins_semibold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="500"
+                            android:textColor="@color/white"
+                            android:textSize="20sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="0dp"
+                    android:layout_height="100dp"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="8dp"
+                    android:elevation="4dp"
+                    android:backgroundTint="@color/green"
+                    app:cardCornerRadius="12dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:padding="12dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Upcoming Rental"
+                            android:textColor="@color/white"
+                            android:textSize="16sp"
+                            android:fontFamily="@font/poppins_semibold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="120"
+                            android:textColor="@color/white"
+                            android:textSize="20sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="0dp"
+                    android:layout_height="100dp"
+                    android:layout_weight="1"
+                    android:elevation="4dp"
+                    android:backgroundTint="@color/orange"
+                    app:cardCornerRadius="12dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:orientation="vertical"
+                        android:padding="12dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Return Rental"
+                            android:textColor="@color/white"
+                            android:textSize="16sp"
+                            android:fontFamily="@font/poppins_semibold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="90"
+                            android:textColor="@color/white"
+                            android:textSize="20sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+            </LinearLayout>
+
+            <!-- Search & Filter -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="16dp">
+
+                <EditText
+                    android:id="@+id/searchBar"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:hint="Search rentals"
+                    android:padding="10dp"
+                    android:background="@drawable/bg_search"
+                    android:drawableStart="@drawable/ic_search"
+                    android:drawablePadding="8dp"
+                    android:fontFamily="@font/poppins_semibold" />
+
+                <Spinner
+                    android:id="@+id/filterSpinner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:entries="@array/filter_options"
+                    android:layout_marginStart="8dp"
+                    android:background="@drawable/bg_spinner"
+                    android:padding="12dp" />
+
+                <Button
+                    android:id="@+id/moreFilterBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="More Filter"
+                    android:layout_marginStart="8dp"
+                    android:backgroundTint="@color/light_grey"
+                    android:textColor="@color/black" />
+            </LinearLayout>
+
+            <!-- Rental Table -->
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scrollbars="horizontal">
+
+                <TableLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:stretchColumns="*"
+                    android:shrinkColumns="*"
+                    android:background="@drawable/table_border"
+                    android:padding="1dp">
+
+                    <!-- Header -->
+                    <TableRow android:background="@color/dark_grey">
+                        <TextView style="@style/TableHeader" android:text="Id" />
+                        <TextView style="@style/TableHeader" android:text="Asset ID" />
+                        <TextView style="@style/TableHeader" android:text="Project ID" />
+                        <TextView style="@style/TableHeader" android:text="Tanggal Mulai" />
+                        <TextView style="@style/TableHeader" android:text="Tanggal Selesai" />
+                        <TextView style="@style/TableHeader" android:text="Status" />
+                        <TextView style="@style/TableHeader" android:text="Created At" />
+                        <TextView style="@style/TableHeader" android:text="Updated At" />
+                    </TableRow>
+
+                    <!-- Data Row 1 -->
+                    <TableRow>
+                        <TextView style="@style/TableCell" android:text="1" />
+                        <TextView style="@style/TableCell" android:text="101" />
+                        <TextView style="@style/TableCell" android:text="1001" />
+                        <TextView style="@style/TableCell" android:text="2024-01-15" />
+                        <TextView style="@style/TableCell" android:text="2024-01-20" />
+                        <TextView style="@style/TableCell" android:text="aktif" />
+                        <TextView style="@style/TableCell" android:text="2024-01-01 10:00" />
+                        <TextView style="@style/TableCell" android:text="2024-01-15 08:30" />
+                    </TableRow>
+
+                    <!-- Data Row 2 -->
+                    <TableRow>
+                        <TextView style="@style/TableCell" android:text="2" />
+                        <TextView style="@style/TableCell" android:text="102" />
+                        <TextView style="@style/TableCell" android:text="1002" />
+                        <TextView style="@style/TableCell" android:text="2024-02-01" />
+                        <TextView style="@style/TableCell" android:text="2024-02-10" />
+                        <TextView style="@style/TableCell" android:text="aktif" />
+                        <TextView style="@style/TableCell" android:text="2024-01-25 11:00" />
+                        <TextView style="@style/TableCell" android:text="2024-02-01 09:15" />
+                    </TableRow>
+
+                    <!-- Data Row 3 -->
+                    <TableRow>
+                        <TextView style="@style/TableCell" android:text="3" />
+                        <TextView style="@style/TableCell" android:text="103" />
+                        <TextView style="@style/TableCell" android:text="1003" />
+                        <TextView style="@style/TableCell" android:text="2024-03-05" />
+                        <TextView style="@style/TableCell" android:text="2024-03-12" />
+                        <TextView style="@style/TableCell" android:text="selesai" />
+                        <TextView style="@style/TableCell" android:text="2024-02-28 14:30" />
+                        <TextView style="@style/TableCell" android:text="2024-03-05 13:00" />
+                    </TableRow>
+                </TableLayout>
+            </HorizontalScrollView>
+        </LinearLayout>
+    </ScrollView>
+
+    <!-- Bottom Toolbar -->
+    <LinearLayout
+        android:id="@+id/bottomToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal"
+        android:background="@color/red"
+        android:padding="12dp"
+        android:gravity="center_vertical"
+        android:weightSum="2"
+        android:elevation="8dp">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:gravity="start|center_vertical">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_profile" />
+
+            <TextView
+                android:id="@+id/profileButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Profile"
+                android:textColor="@color/white"
+                android:layout_marginStart="8dp"
+                android:textSize="16sp"
+                android:fontFamily="@font/poppins_semibold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:gravity="end|center_vertical">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_logout" />
+
+            <TextView
+                android:id="@+id/logoutButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Logout"
+                android:textColor="@color/white"
+                android:layout_marginStart="8dp"
+                android:textSize="16sp"
+                android:fontFamily="@font/poppins_semibold" />
+        </LinearLayout>
+    </LinearLayout>
+</RelativeLayout>

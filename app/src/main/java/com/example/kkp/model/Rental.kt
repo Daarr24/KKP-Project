@@ -32,6 +32,9 @@ data class Tagihan(
     @SerializedName("id")
     val id: Long,
     
+    @SerializedName("rental_id")
+    val rentalId: Long,
+    
     @SerializedName("nomor_invoice")
     val nomorInvoice: Int,
     
@@ -41,11 +44,23 @@ data class Tagihan(
     @SerializedName("tanggal_tagihan")
     val tanggalTagihan: String,
     
+    @SerializedName("jumlah_unit")
+    val jumlahUnit: Int,
+    
+    @SerializedName("durasi_tagih")
+    val durasiTagih: String,
+    
+    @SerializedName("grand_total")
+    val grandTotal: Int,
+    
     @SerializedName("created_at")
     val createdAt: String?,
     
     @SerializedName("updated_at")
-    val updatedAt: String?
+    val updatedAt: String?,
+    
+    @SerializedName("rental")
+    val rental: Rental? = null
 )
 
 data class Rental(
@@ -58,9 +73,6 @@ data class Rental(
     @SerializedName("project_id")
     val projectId: Long,
     
-    @SerializedName("tagihan_id")
-    val tagihanId: Long,
-    
     @SerializedName("status")
     val status: String, // aktif
     
@@ -69,9 +81,6 @@ data class Rental(
     
     @SerializedName("periode_ahir")
     val periodeAkhir: String,
-    
-    @SerializedName("jumlah_unit")
-    val jumlahUnit: Int,
     
     @SerializedName("total_tagihan")
     val totalTagihan: Int,
@@ -107,6 +116,9 @@ data class PengirimanRequest(
 )
 
 data class TagihanRequest(
+    @SerializedName("rental_id")
+    val rentalId: Long,
+    
     @SerializedName("nomor_invoice")
     val nomorInvoice: Int,
     
@@ -114,7 +126,16 @@ data class TagihanRequest(
     val keterangan: String,
     
     @SerializedName("tanggal_tagihan")
-    val tanggalTagihan: String
+    val tanggalTagihan: String,
+    
+    @SerializedName("jumlah_unit")
+    val jumlahUnit: Int,
+    
+    @SerializedName("durasi_tagih")
+    val durasiTagih: String,
+    
+    @SerializedName("grand_total")
+    val grandTotal: Int
 )
 
 data class RentalRequest(
@@ -124,9 +145,6 @@ data class RentalRequest(
     @SerializedName("project_id")
     val projectId: Long,
     
-    @SerializedName("tagihan_id")
-    val tagihanId: Long,
-    
     @SerializedName("status")
     val status: String,
     
@@ -135,9 +153,6 @@ data class RentalRequest(
     
     @SerializedName("periode_ahir")
     val periodeAkhir: String,
-    
-    @SerializedName("jumlah_unit")
-    val jumlahUnit: Int,
     
     @SerializedName("total_tagihan")
     val totalTagihan: Int

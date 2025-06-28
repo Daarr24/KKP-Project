@@ -141,13 +141,13 @@ fun AssetCard(asset: Asset) {
             ) {
                 Column {
                     Text(
-                        text = asset.merk,
+                        text = "${asset.merk} - ${asset.type}",
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold
                     )
                     Text(
-                        text = asset.type,
-                        style = MaterialTheme.typography.bodyMedium,
+                        text = "ID: ${asset.id}",
+                        style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
@@ -168,6 +168,20 @@ fun AssetCard(asset: Asset) {
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = "Created: ${asset.createdAt ?: "N/A"}",
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+            if (asset.detailAssets?.isNotEmpty() == true) {
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    text = "Detail Assets: ${asset.detailAssets.size}",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.primary
+                )
+            }
         }
     }
 }

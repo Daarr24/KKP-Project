@@ -100,12 +100,12 @@ fun DashboardScreen(
                     )
                     Spacer(modifier = Modifier.height(4.dp))
                     Text(
-                        text = userInfo?.second ?: "User",
+                        text = userInfo?.second ?: "Danu Febri Andi Prasetyo",
                         style = MaterialTheme.typography.bodyLarge,
                         color = Color.White
                     )
                     Text(
-                        text = userInfo?.third ?: "",
+                        text = userInfo?.third ?: "danuprasetya573@gmail.com",
                         style = MaterialTheme.typography.bodyMedium,
                         color = Color.White.copy(alpha = 0.7f)
                     )

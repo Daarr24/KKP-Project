@@ -125,27 +125,21 @@ class RentalViewModel : ViewModel() {
     fun createRental(
         pengirimanId: Long,
         projectId: Long,
-        tagihanId: Long,
         status: String,
         periodeMulai: String,
         periodeAkhir: String,
-        jumlahUnit: Int,
         totalTagihan: Int
     ) {
         viewModelScope.launch {
             _rentalState.value = RentalState.Loading
-            
             val rentalRequest = RentalRequest(
                 pengirimanId = pengirimanId,
                 projectId = projectId,
-                tagihanId = tagihanId,
                 status = status,
                 periodeMulai = periodeMulai,
                 periodeAkhir = periodeAkhir,
-                jumlahUnit = jumlahUnit,
                 totalTagihan = totalTagihan
             )
-            
             val result = rentalRepository.createRental(rentalRequest)
             result.fold(
                 onSuccess = { rental ->
@@ -187,17 +181,24 @@ class RentalViewModel : ViewModel() {
     }
     
     fun createTagihan(
+        rentalId: Long,
         nomorInvoice: Int,
         keterangan: String,
-        tanggalTagihan: String
+        tanggalTagihan: String,
+        jumlahUnit: Int,
+        durasiTagih: String,
+        grandTotal: Int
     ) {
         viewModelScope.launch {
             val tagihanRequest = TagihanRequest(
+                rentalId = rentalId,
                 nomorInvoice = nomorInvoice,
                 keterangan = keterangan,
-                tanggalTagihan = tanggalTagihan
+                tanggalTagihan = tanggalTagihan,
+                jumlahUnit = jumlahUnit,
+                durasiTagih = durasiTagih,
+                grandTotal = grandTotal
             )
-            
             val result = rentalRepository.createTagihan(tagihanRequest)
             result.fold(
                 onSuccess = { tagihan ->

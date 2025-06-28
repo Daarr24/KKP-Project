@@ -84,7 +84,7 @@ fun ProfileScreen(
             
             // User Name
             Text(
-                text = userInfo?.second ?: "Haidar Farhan",
+                text = userInfo?.second ?: "Danu Febri Andi Prasetyo",
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold,
                 color = Color.White,
@@ -94,7 +94,7 @@ fun ProfileScreen(
             
             // User Email
             Text(
-                text = userInfo?.third ?: "haidarfarhan.r@gmail.com",
+                text = userInfo?.third ?: "danuprasetya573@gmail.com",
                 fontSize = 16.sp,
                 color = Color.White.copy(alpha = 0.7f),
                 textAlign = TextAlign.Center,
@@ -108,7 +108,7 @@ fun ProfileScreen(
                 shape = RoundedCornerShape(20.dp)
             ) {
                 Text(
-                    text = "IT Helpdesk",
+                    text = "Asset Manager",
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Bold,
                     color = NeonBlue,
@@ -137,10 +137,10 @@ fun ProfileScreen(
                         modifier = Modifier.padding(bottom = 16.dp)
                     )
                     
-                    ProfileInfoRow("User ID", userInfo?.first?.toString() ?: "N/A")
+                    ProfileInfoRow("User ID", userInfo?.first?.toString() ?: "1")
                     ProfileInfoRow("Email Verified", if (userInfo?.first != null) "Yes" else "No")
-                    ProfileInfoRow("Member Since", userInfo?.third?.substring(0, 10) ?: "N/A")
-                    ProfileInfoRow("Last Updated", userInfo?.second?.substring(0, 10) ?: "N/A")
+                    ProfileInfoRow("Member Since", "2025-06-28")
+                    ProfileInfoRow("Last Updated", "2025-06-28")
                 }
             }
             

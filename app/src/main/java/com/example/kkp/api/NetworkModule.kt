@@ -12,7 +12,7 @@ import java.util.concurrent.TimeUnit
 object NetworkModule {
     
     // Ganti dengan URL hosting Anda di Hostinger
-    private const val BASE_URL = "https://your-domain.com/"
+    private const val BASE_URL = "http://ww25.your-domain.com/"
     
     private val gson: Gson = GsonBuilder()
         .setLenient()

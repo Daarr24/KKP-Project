@@ -275,8 +275,8 @@ fun StatCard(
 @Composable
 fun RentalTable(rentals: List<Rental>) {
     val tableHeaders = listOf(
-        "Id", "Asset ID", "Project ID", "Tanggal Mulai", 
-        "Tanggal Selesai", "Status", "Created At", "Updated At"
+        "Id", "Pengiriman ID", "Project ID", "Tanggal Mulai", 
+        "Tanggal Selesai", "Status", "Total Tagihan", "Created At"
     )
     
     // Sample data for demonstration (replace with actual rental data)
@@ -285,41 +285,24 @@ fun RentalTable(rentals: List<Rental>) {
             Rental(
                 id = 1,
                 pengirimanId = 1,
-                projectId = 1001,
-                tagihanId = 1,
+                projectId = 1,
                 status = "aktif",
-                periodeMulai = "2024-01-15",
-                periodeAkhir = "2024-01-20",
-                jumlahUnit = 5,
-                totalTagihan = 1000000,
-                createdAt = "2024-01-01 10:00",
-                updatedAt = "2024-01-15 08:30"
+                periodeMulai = "2025-06-29",
+                periodeAkhir = "2025-08-29",
+                totalTagihan = 550000,
+                createdAt = "2025-06-28 13:54:44",
+                updatedAt = "2025-06-28 13:54:44"
             ),
             Rental(
                 id = 2,
                 pengirimanId = 2,
-                projectId = 1002,
-                tagihanId = 2,
+                projectId = 1,
                 status = "aktif",
-                periodeMulai = "2024-02-01",
-                periodeAkhir = "2024-02-10",
-                jumlahUnit = 3,
-                totalTagihan = 750000,
-                createdAt = "2024-01-25 11:00",
-                updatedAt = "2024-02-01 09:15"
-            ),
-            Rental(
-                id = 3,
-                pengirimanId = 3,
-                projectId = 1003,
-                tagihanId = 3,
-                status = "selesai",
-                periodeMulai = "2024-03-05",
-                periodeAkhir = "2024-03-12",
-                jumlahUnit = 2,
-                totalTagihan = 500000,
-                createdAt = "2024-02-28 14:30",
-                updatedAt = "2024-03-05 13:00"
+                periodeMulai = "2025-06-29",
+                periodeAkhir = "2025-08-29",
+                totalTagihan = 550000,
+                createdAt = "2025-06-28 13:55:05",
+                updatedAt = "2025-06-28 13:55:05"
             )
         )
     } else {
@@ -411,14 +394,14 @@ fun RentalTable(rentals: List<Rental>) {
                         textAlign = TextAlign.Center
                     )
                     Text(
-                        text = rental.createdAt ?: "",
+                        text = "Rp ${rental.totalTagihan}",
                         color = Color.White,
                         fontSize = 12.sp,
                         modifier = Modifier.weight(1f),
                         textAlign = TextAlign.Center
                     )
                     Text(
-                        text = rental.updatedAt ?: "",
+                        text = rental.createdAt ?: "",
                         color = Color.White,
                         fontSize = 12.sp,
                         modifier = Modifier.weight(1f),

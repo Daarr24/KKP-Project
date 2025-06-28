@@ -201,7 +201,7 @@ fun LoginScreen(
                     style = MaterialTheme.typography.bodySmall
                 )
                 Text(
-                    text = "Password: (check database)",
+                    text = "Password: (check database for hashed password)",
                     style = MaterialTheme.typography.bodySmall
                 )
             }

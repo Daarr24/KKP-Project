@@ -11,8 +11,8 @@ import java.util.concurrent.TimeUnit
 
 object NetworkModule {
     
-    // Ganti dengan URL hosting Anda di Hostinger
-    private const val BASE_URL = "http://ww25.your-domain.com/"
+    // URL Hostinger Anda
+    private const val BASE_URL = "https://deeppink-horse-271160.hostingersite.com/api/"
     
     private val gson: Gson = GsonBuilder()
         .setLenient()

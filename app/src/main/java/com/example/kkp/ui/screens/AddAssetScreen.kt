@@ -22,6 +22,8 @@ import androidx.compose.ui.unit.dp
 import com.example.kkp.ui.theme.*
 import java.text.SimpleDateFormat
 import java.util.*
+import androidx.compose.ui.tooling.preview.Preview
+import com.example.kkp.ui.theme.KKPTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -43,64 +45,80 @@ fun AddAssetScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(
-                Brush.linearGradient(
-                    listOf(GlassBg, NeonBlue.copy(alpha = 0.1f), NeonPurple.copy(alpha = 0.1f))
-                )
-            )
-            .padding(16.dp)
+            .background(WhiteSoft)
+            .padding(20.dp)
     ) {
-        Column(
+        Card(
             modifier = Modifier
                 .fillMaxWidth()
-                .clip(RoundedCornerShape(24.dp))
-                .background(CardBg.copy(alpha = 0.95f))
-                .padding(24.dp)
-                .verticalScroll(rememberScrollState())
                 .align(Alignment.Center),
+            shape = RoundedCornerShape(28.dp),
+            colors = CardDefaults.cardColors(containerColor = White),
+            elevation = CardDefaults.cardElevation(defaultElevation = 10.dp)
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(32.dp)
+                    .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = "Add New Asset",
-                style = MaterialTheme.typography.headlineSmall,
-                fontWeight = FontWeight.Bold,
-                color = NeonBlue
+                    text = "Tambah Asset Baru",
+                    style = MaterialTheme.typography.headlineMedium,
+                    color = RedPrimary
             )
-            Spacer(modifier = Modifier.height(24.dp))
-            // Form Grid (2 columns)
-            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+                Spacer(modifier = Modifier.height(32.dp))
+                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(24.dp)) {
                 Column(Modifier.weight(1f)) {
                     OutlinedTextField(
                         value = merk,
                         onValueChange = { merk = it },
-                        label = { Text("Merk*") },
+                            label = { Text("Merk*", style = MaterialTheme.typography.labelLarge) },
                         modifier = Modifier.fillMaxWidth(),
-                        singleLine = true
+                            singleLine = true,
+                            shape = RoundedCornerShape(16.dp),
+                            colors = OutlinedTextFieldDefaults.colors(
+                                focusedBorderColor = RedPrimary,
+                                unfocusedBorderColor = GrayMedium,
+                                cursorColor = RedPrimary
+                            )
                     )
-                    Spacer(modifier = Modifier.height(12.dp))
+                        Spacer(modifier = Modifier.height(18.dp))
                     OutlinedTextField(
                         value = serialNumber,
                         onValueChange = { serialNumber = it },
-                        label = { Text("Serial Number*") },
+                            label = { Text("Serial Number*", style = MaterialTheme.typography.labelLarge) },
                         modifier = Modifier.fillMaxWidth(),
-                        singleLine = true
+                            singleLine = true,
+                            shape = RoundedCornerShape(16.dp),
+                            colors = OutlinedTextFieldDefaults.colors(
+                                focusedBorderColor = RedPrimary,
+                                unfocusedBorderColor = GrayMedium,
+                                cursorColor = RedPrimary
+                            )
                     )
-                    Spacer(modifier = Modifier.height(12.dp))
+                        Spacer(modifier = Modifier.height(18.dp))
                     OutlinedTextField(
                         value = purchaseDate,
                         onValueChange = {},
-                        label = { Text("Purchase Date*") },
+                            label = { Text("Tanggal Beli*", style = MaterialTheme.typography.labelLarge) },
                         modifier = Modifier.fillMaxWidth(),
                         singleLine = true,
                         readOnly = true,
                         trailingIcon = {
                             IconButton(onClick = { showDatePicker = true }) {
-                                Icon(Icons.Default.CalendarToday, contentDescription = "Pick Date")
+                                    Icon(Icons.Default.CalendarToday, contentDescription = "Pick Date", tint = RedPrimary)
                             }
-                        }
+                            },
+                            shape = RoundedCornerShape(16.dp),
+                            colors = OutlinedTextFieldDefaults.colors(
+                                focusedBorderColor = RedPrimary,
+                                unfocusedBorderColor = GrayMedium,
+                                cursorColor = RedPrimary
+                            )
                     )
-                    Spacer(modifier = Modifier.height(12.dp))
-                    // Condition Dropdown
+                        Spacer(modifier = Modifier.height(18.dp))
                     var expanded by remember { mutableStateOf(false) }
                     ExposedDropdownMenuBox(
                         expanded = expanded,
@@ -109,18 +127,25 @@ fun AddAssetScreen(
                         OutlinedTextField(
                             value = condition,
                             onValueChange = {},
-                            label = { Text("Condition*") },
+                                label = { Text("Kondisi*", style = MaterialTheme.typography.labelLarge) },
                             readOnly = true,
                             modifier = Modifier.menuAnchor().fillMaxWidth(),
-                            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded) }
+                                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded) },
+                                shape = RoundedCornerShape(16.dp),
+                                colors = OutlinedTextFieldDefaults.colors(
+                                    focusedBorderColor = RedPrimary,
+                                    unfocusedBorderColor = GrayMedium,
+                                    cursorColor = RedPrimary
+                                )
                         )
                         ExposedDropdownMenu(
                             expanded = expanded,
-                            onDismissRequest = { expanded = false }
+                                onDismissRequest = { expanded = false },
+                                modifier = Modifier.background(White)
                         ) {
                             conditionOptions.forEach { option ->
                                 DropdownMenuItem(
-                                    text = { Text(option) },
+                                        text = { Text(option, style = MaterialTheme.typography.bodyLarge) },
                                     onClick = {
                                         condition = option
                                         expanded = false
@@ -134,61 +159,93 @@ fun AddAssetScreen(
                     OutlinedTextField(
                         value = type,
                         onValueChange = { type = it },
-                        label = { Text("Type*") },
+                            label = { Text("Tipe*", style = MaterialTheme.typography.labelLarge) },
                         modifier = Modifier.fillMaxWidth(),
-                        singleLine = true
+                            singleLine = true,
+                            shape = RoundedCornerShape(16.dp),
+                            colors = OutlinedTextFieldDefaults.colors(
+                                focusedBorderColor = RedPrimary,
+                                unfocusedBorderColor = GrayMedium,
+                                cursorColor = RedPrimary
+                            )
                     )
-                    Spacer(modifier = Modifier.height(12.dp))
+                        Spacer(modifier = Modifier.height(18.dp))
                     OutlinedTextField(
                         value = spesifikasi,
                         onValueChange = { spesifikasi = it },
-                        label = { Text("Spesifikasi*") },
+                            label = { Text("Spesifikasi*", style = MaterialTheme.typography.labelLarge) },
                         modifier = Modifier.fillMaxWidth(),
-                        singleLine = true
+                            singleLine = true,
+                            shape = RoundedCornerShape(16.dp),
+                            colors = OutlinedTextFieldDefaults.colors(
+                                focusedBorderColor = RedPrimary,
+                                unfocusedBorderColor = GrayMedium,
+                                cursorColor = RedPrimary
+                            )
                     )
-                    Spacer(modifier = Modifier.height(12.dp))
+                        Spacer(modifier = Modifier.height(18.dp))
                     OutlinedTextField(
                         value = purchasePrice,
                         onValueChange = { purchasePrice = it },
-                        label = { Text("Purchase Price*") },
+                            label = { Text("Harga Beli*", style = MaterialTheme.typography.labelLarge) },
                         modifier = Modifier.fillMaxWidth(),
                         singleLine = true,
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                            shape = RoundedCornerShape(16.dp),
+                            colors = OutlinedTextFieldDefaults.colors(
+                                focusedBorderColor = RedPrimary,
+                                unfocusedBorderColor = GrayMedium,
+                                cursorColor = RedPrimary
+                            )
                     )
                 }
             }
-            Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(24.dp))
             OutlinedTextField(
                 value = note,
                 onValueChange = { note = it },
-                label = { Text("Note*") },
+                    label = { Text("Catatan*", style = MaterialTheme.typography.labelLarge) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(100.dp),
                 visualTransformation = VisualTransformation.None,
-                maxLines = 5
+                    maxLines = 5,
+                    shape = RoundedCornerShape(16.dp),
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedBorderColor = RedPrimary,
+                        unfocusedBorderColor = GrayMedium,
+                        cursorColor = RedPrimary
+                    )
             )
-            Spacer(modifier = Modifier.height(24.dp))
+                Spacer(modifier = Modifier.height(32.dp))
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.End
             ) {
-                Button(
+                    OutlinedButton(
                     onClick = onCancel,
-                    colors = ButtonDefaults.buttonColors(containerColor = Color.LightGray)
+                        colors = ButtonDefaults.outlinedButtonColors(
+                            containerColor = White,
+                            contentColor = RedPrimary
+                        ),
+                        border = androidx.compose.foundation.BorderStroke(2.dp, RedPrimary),
+                        shape = RoundedCornerShape(16.dp)
                 ) {
-                    Text("Cancel", color = Color.Black)
+                        Text("Batal", style = MaterialTheme.typography.labelLarge)
                 }
-                Spacer(modifier = Modifier.width(16.dp))
+                    Spacer(modifier = Modifier.width(20.dp))
                 Button(
                     onClick = {
                         onAddAsset(
                             merk, type, serialNumber, spesifikasi, purchaseDate, purchasePrice, condition, note
                         )
                     },
-                    colors = ButtonDefaults.buttonColors(containerColor = NeonBlue)
+                        colors = ButtonDefaults.buttonColors(containerColor = RedPrimary),
+                        shape = RoundedCornerShape(16.dp),
+                        elevation = ButtonDefaults.buttonElevation(defaultElevation = 6.dp)
                 ) {
-                    Text("Add Asset", color = Color.White)
+                        Text("Tambah Asset", style = MaterialTheme.typography.labelLarge, color = White)
+                    }
                 }
             }
         }
@@ -239,4 +296,14 @@ fun DatePickerDialog(
             TextButton(onClick = onDismiss) { Text("Cancel") }
         }
     )
+}
+
+@Preview(showBackground = true, name = "AddAssetScreen Preview")
+@Composable
+fun PreviewAddAssetScreen() {
+    KKPTheme {
+        Box(Modifier.height(600.dp).fillMaxWidth()) {
+            AddAssetScreen()
+        }
+    }
 } 

@@ -11,8 +11,10 @@ import java.util.concurrent.TimeUnit
 
 object NetworkModule {
     
-    // URL Hostinger Anda
-    private const val BASE_URL = "https://deeppink-horse-271160.hostingersite.com/api/"
+    // Untuk backend lokal (emulator Android)
+    private const val BASE_URL = "https://viacomputertangerang.com/api/"
+    // Jika pakai device fisik, ganti dengan IP komputer Anda, misal:
+    // private const val BASE_URL = "http://192.168.1.10/api/"
     
     private val gson: Gson = GsonBuilder()
         .setLenient()

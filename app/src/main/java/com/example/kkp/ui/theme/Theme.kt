@@ -15,6 +15,7 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
+import androidx.compose.ui.text.font.FontFamily
 
 // Neon & glassmorphism inspired colors
 val NeonBlue = Color(0xFF00CFFF)
@@ -26,29 +27,29 @@ val CardBg = Color(0xCC23233A)
 val SurfaceGlass = Color(0xB31A1A2E)
 
 private val DarkColorScheme = darkColorScheme(
-    primary = NeonBlue,
-    secondary = NeonPurple,
-    tertiary = NeonGreen,
-    background = GlassBg,
-    surface = SurfaceGlass,
-    onPrimary = Color.White,
-    onSecondary = Color.White,
-    onTertiary = Color.White,
-    onBackground = Color.White,
-    onSurface = Color.White
+    primary = RedPrimary,
+    secondary = RedAccent,
+    tertiary = BlueInfo,
+    background = Black,
+    surface = GrayDark,
+    onPrimary = White,
+    onSecondary = White,
+    onTertiary = White,
+    onBackground = White,
+    onSurface = White
 )
 
 private val LightColorScheme = lightColorScheme(
-    primary = NeonBlue,
-    secondary = NeonPurple,
-    tertiary = NeonGreen,
-    background = Color(0xFFF5F7FA),
-    surface = Color(0xFFF5F7FA),
-    onPrimary = Color.White,
-    onSecondary = Color.White,
-    onTertiary = Color.White,
-    onBackground = Color(0xFF1A1A2E),
-    onSurface = Color(0xFF1A1A2E)
+    primary = RedPrimary,
+    secondary = RedAccent,
+    tertiary = BlueInfo,
+    background = WhiteSoft,
+    surface = White,
+    onPrimary = White,
+    onSecondary = White,
+    onTertiary = White,
+    onBackground = Black,
+    onSurface = Black
 )
 
 @Composable

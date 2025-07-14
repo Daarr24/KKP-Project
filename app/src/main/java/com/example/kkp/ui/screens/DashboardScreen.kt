@@ -25,6 +25,9 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.kkp.ui.theme.*
 import com.example.kkp.viewmodel.AuthViewModel
+import androidx.compose.ui.tooling.preview.Preview
+import com.example.kkp.ui.theme.KKPTheme
+import androidx.lifecycle.viewmodel.compose.viewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -52,29 +55,26 @@ fun DashboardScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Asset Management") },
+                title = { Text("Asset Management", style = MaterialTheme.typography.headlineSmall, color = RedPrimary) },
                 actions = {
                     IconButton(onClick = onLogout) {
-                        Icon(Icons.Default.Logout, contentDescription = "Logout")
+                        Icon(Icons.Default.Logout, contentDescription = "Logout", tint = RedPrimary)
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = GlassBg.copy(alpha = 0.85f)
+                    containerColor = White,
+                    titleContentColor = RedPrimary
                 )
             )
         },
-        containerColor = GlassBg
+        containerColor = WhiteSoft
     ) { paddingValues ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .background(
-                    Brush.linearGradient(
-                        listOf(GlassBg, NeonBlue.copy(alpha = 0.1f), NeonPurple.copy(alpha = 0.1f))
-                    )
-                )
-                .padding(16.dp)
+                .background(WhiteSoft)
+                .padding(20.dp)
                 .verticalScroll(rememberScrollState())
         ) {
             // Welcome Section
@@ -82,36 +82,33 @@ fun DashboardScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = 24.dp)
-                    .blur(8.dp)
                     .clip(RoundedCornerShape(24.dp)),
                 colors = CardDefaults.cardColors(
-                    containerColor = CardBg.copy(alpha = 0.85f)
+                    containerColor = White
                 ),
-                elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
+                elevation = CardDefaults.cardElevation(defaultElevation = 10.dp)
             ) {
                 Column(
-                    modifier = Modifier.padding(20.dp)
+                    modifier = Modifier.padding(24.dp)
                 ) {
                     Text(
                         text = "Welcome back!",
                         style = MaterialTheme.typography.headlineSmall,
-                        fontWeight = FontWeight.Bold,
-                        color = NeonBlue
+                        color = RedPrimary
                     )
                     Spacer(modifier = Modifier.height(4.dp))
                     Text(
                         text = userInfo?.second ?: "Danu Febri Andi Prasetyo",
                         style = MaterialTheme.typography.bodyLarge,
-                        color = Color.White
+                        color = Black
                     )
                     Text(
                         text = userInfo?.third ?: "danuprasetya573@gmail.com",
                         style = MaterialTheme.typography.bodyMedium,
-                        color = Color.White.copy(alpha = 0.7f)
+                        color = GrayDark
                     )
                 }
             }
-            
             // Visualizations
             Row(
                 modifier = Modifier
@@ -123,7 +120,7 @@ fun DashboardScreen(
                     modifier = Modifier
                         .weight(1f)
                         .height(180.dp),
-                    colors = CardDefaults.cardColors(containerColor = CardBg.copy(alpha = 0.85f)),
+                    colors = CardDefaults.cardColors(containerColor = White),
                     elevation = CardDefaults.cardElevation(defaultElevation = 6.dp)
                 ) {
                     Column(
@@ -132,9 +129,8 @@ fun DashboardScreen(
                     ) {
                         Text(
                             text = "Assets by Category",
-                            style = MaterialTheme.typography.titleSmall,
-                            color = NeonBlue,
-                            fontWeight = FontWeight.Bold
+                            style = MaterialTheme.typography.titleLarge,
+                            color = RedPrimary
                         )
                         Spacer(modifier = Modifier.height(8.dp))
                         // Placeholder for chart
@@ -142,12 +138,12 @@ fun DashboardScreen(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .height(120.dp)
-                                .background(NeonBlue.copy(alpha = 0.2f), RoundedCornerShape(8.dp)),
+                                .background(RedPrimary.copy(alpha = 0.08f), RoundedCornerShape(8.dp)),
                             contentAlignment = Alignment.Center
                         ) {
                             Text(
                                 text = "Chart Placeholder",
-                                color = Color.White,
+                                color = GrayDark,
                                 style = MaterialTheme.typography.bodySmall
                             )
                         }
@@ -157,7 +153,7 @@ fun DashboardScreen(
                     modifier = Modifier
                         .weight(1f)
                         .height(180.dp),
-                    colors = CardDefaults.cardColors(containerColor = CardBg.copy(alpha = 0.85f)),
+                    colors = CardDefaults.cardColors(containerColor = White),
                     elevation = CardDefaults.cardElevation(defaultElevation = 6.dp)
                 ) {
                     Column(
@@ -166,9 +162,8 @@ fun DashboardScreen(
                     ) {
                         Text(
                             text = "Rental Status",
-                            style = MaterialTheme.typography.titleSmall,
-                            color = NeonGreen,
-                            fontWeight = FontWeight.Bold
+                            style = MaterialTheme.typography.titleLarge,
+                            color = BlueInfo
                         )
                         Spacer(modifier = Modifier.height(8.dp))
                         // Placeholder for chart
@@ -176,19 +171,18 @@ fun DashboardScreen(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .height(120.dp)
-                                .background(NeonGreen.copy(alpha = 0.2f), RoundedCornerShape(8.dp)),
+                                .background(BlueInfo.copy(alpha = 0.08f), RoundedCornerShape(8.dp)),
                             contentAlignment = Alignment.Center
                         ) {
                             Text(
                                 text = "Chart Placeholder",
-                                color = Color.White,
+                                color = GrayDark,
                                 style = MaterialTheme.typography.bodySmall
                             )
                         }
                     }
                 }
             }
-            
             // Menu Grid
             LazyVerticalGrid(
                 columns = GridCells.Fixed(2),
@@ -198,10 +192,7 @@ fun DashboardScreen(
             ) {
                 items(menuItems) { menuItem ->
                     MenuCard(
-                        title = menuItem.title,
-                        icon = menuItem.icon,
-                        description = menuItem.description,
-                        onClick = menuItem.onClick
+                        menuItem = menuItem
                     )
                 }
             }
@@ -212,13 +203,10 @@ fun DashboardScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MenuCard(
-    title: String,
-    icon: ImageVector,
-    description: String,
-    onClick: () -> Unit
+    menuItem: MenuItem
 ) {
     Card(
-        onClick = onClick,
+        onClick = menuItem.onClick,
         modifier = Modifier
             .fillMaxWidth()
             .height(160.dp)
@@ -241,14 +229,14 @@ fun MenuCard(
             verticalArrangement = Arrangement.Center
         ) {
             Icon(
-                imageVector = icon,
-                contentDescription = title,
+                imageVector = menuItem.icon,
+                contentDescription = menuItem.title,
                 modifier = Modifier.size(48.dp),
                 tint = NeonBlue
             )
             Spacer(modifier = Modifier.height(12.dp))
             Text(
-                text = title,
+                text = menuItem.title,
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Medium,
                 textAlign = TextAlign.Center,
@@ -256,7 +244,7 @@ fun MenuCard(
             )
             Spacer(modifier = Modifier.height(4.dp))
             Text(
-                text = description,
+                text = menuItem.description,
                 style = MaterialTheme.typography.bodySmall,
                 color = NeonGreen,
                 textAlign = TextAlign.Center
@@ -319,4 +307,23 @@ fun rememberMenuItems(
             onClick = onNavigateToProfile
         )
     )
+} 
+
+@Preview(showBackground = true, name = "DashboardScreen Preview")
+@Composable
+fun PreviewDashboardScreen() {
+    KKPTheme {
+        Box(Modifier.height(600.dp).fillMaxWidth()) {
+            DashboardScreen(
+                onLogout = {},
+                onNavigateToAssets = {},
+                onNavigateToProjects = {},
+                onNavigateToRental = {},
+                onNavigateToPengiriman = {},
+                onNavigateToTagihan = {},
+                onNavigateToProfile = {},
+                authViewModel = viewModel() // Jika error, bisa gunakan mock AuthViewModel()
+            )
+        }
+    }
 } 

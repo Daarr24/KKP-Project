@@ -27,6 +27,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.kkp.model.Rental
 import com.example.kkp.ui.theme.*
 import com.example.kkp.viewmodel.RentalViewModel
+import androidx.compose.ui.tooling.preview.Preview
+import com.example.kkp.ui.theme.KKPTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -50,98 +52,92 @@ fun RentalScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Rentals Inventory") },
+                title = { Text("Rentals Inventory", style = MaterialTheme.typography.headlineSmall, color = RedPrimary) },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = GlassBg.copy(alpha = 0.85f)
+                    containerColor = White,
+                    titleContentColor = RedPrimary
                 )
             )
         },
-        containerColor = GlassBg
+        containerColor = WhiteSoft
     ) { paddingValues ->
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+                .padding(20.dp),
+            verticalArrangement = Arrangement.spacedBy(20.dp)
         ) {
             // Statistics Cards
             item {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    horizontalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
                     StatCard(
                         title = "Active Rental",
                         value = activeRentals.toString(),
-                        backgroundColor = NeonBlue,
+                        backgroundColor = RedPrimary,
                         modifier = Modifier.weight(1f)
                     )
                     StatCard(
                         title = "Upcoming Rental",
                         value = upcomingRentals.toString(),
-                        backgroundColor = NeonGreen,
+                        backgroundColor = BlueInfo,
                         modifier = Modifier.weight(1f)
                     )
                     StatCard(
                         title = "Return Rental",
                         value = returnRentals.toString(),
-                        backgroundColor = Color(0xFFFF8C00), // Orange
+                        backgroundColor = YellowWarning,
                         modifier = Modifier.weight(1f)
                     )
                 }
             }
-            
             // Search & Filter
             item {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    horizontalArrangement = Arrangement.spacedBy(12.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     OutlinedTextField(
                         value = searchQuery,
                         onValueChange = { searchQuery = it },
-                        placeholder = { Text("Search rentals") },
-                        leadingIcon = { Icon(Icons.Default.Search, contentDescription = "Search") },
+                        placeholder = { Text("Cari rental", style = MaterialTheme.typography.bodyMedium) },
+                        leadingIcon = { Icon(Icons.Default.Search, contentDescription = "Search", tint = RedPrimary) },
                         modifier = Modifier.weight(1f),
                         colors = OutlinedTextFieldDefaults.colors(
-                            focusedBorderColor = NeonBlue,
-                            unfocusedBorderColor = Color.White.copy(alpha = 0.3f),
-                            focusedLabelColor = NeonBlue,
-                            unfocusedLabelColor = Color.White.copy(alpha = 0.7f),
-                            cursorColor = NeonBlue,
-                            focusedTextColor = Color.White,
-                            unfocusedTextColor = Color.White
+                            focusedBorderColor = RedPrimary,
+                            unfocusedBorderColor = GrayMedium,
+                            cursorColor = RedPrimary
                         ),
-                        shape = RoundedCornerShape(12.dp)
+                        shape = RoundedCornerShape(14.dp)
                     )
-                    
                     // Filter Dropdown
                     Box {
                         OutlinedButton(
                             onClick = { expanded = true },
                             colors = ButtonDefaults.outlinedButtonColors(
-                                containerColor = Color.White.copy(alpha = 0.1f),
-                                contentColor = Color.White
+                                containerColor = White,
+                                contentColor = RedPrimary
                             ),
                             border = androidx.compose.foundation.BorderStroke(
-                                1.dp, Color.White.copy(alpha = 0.3f)
+                                1.dp, RedPrimary
                             ),
-                            shape = RoundedCornerShape(8.dp)
+                            shape = RoundedCornerShape(12.dp)
                         ) {
-                            Text(selectedFilter)
-                            Icon(Icons.Default.ArrowDropDown, contentDescription = "Filter")
+                            Text(selectedFilter, style = MaterialTheme.typography.labelLarge)
+                            Icon(Icons.Default.ArrowDropDown, contentDescription = "Filter", tint = RedPrimary)
                         }
-                        
                         DropdownMenu(
                             expanded = expanded,
                             onDismissRequest = { expanded = false },
-                            modifier = Modifier.background(CardBg)
+                            modifier = Modifier.background(White)
                         ) {
                             filterOptions.forEach { option ->
                                 DropdownMenuItem(
-                                    text = { Text(option, color = Color.White) },
+                                    text = { Text(option, style = MaterialTheme.typography.bodyLarge) },
                                     onClick = {
                                         selectedFilter = option
                                         expanded = false
@@ -150,29 +146,26 @@ fun RentalScreen(
                             }
                         }
                     }
-                    
                     OutlinedButton(
                         onClick = { /* TODO: Implement more filter */ },
                         colors = ButtonDefaults.outlinedButtonColors(
-                            containerColor = Color.White.copy(alpha = 0.1f),
-                            contentColor = Color.White
+                            containerColor = White,
+                            contentColor = RedPrimary
                         ),
                         border = androidx.compose.foundation.BorderStroke(
-                            1.dp, Color.White.copy(alpha = 0.3f)
+                            1.dp, RedPrimary
                         ),
-                        shape = RoundedCornerShape(8.dp)
+                        shape = RoundedCornerShape(12.dp)
                     ) {
-                        Text("More Filter")
+                        Text("Filter Lain", style = MaterialTheme.typography.labelLarge)
                     }
                 }
             }
-            
             // Rental Table
             item {
                 RentalTable(rentals = rentals)
             }
         }
-        
         // Bottom Toolbar
         Box(
             modifier = Modifier.fillMaxSize()
@@ -182,10 +175,10 @@ fun RentalScreen(
                     .align(Alignment.BottomCenter)
                     .fillMaxWidth()
                     .background(
-                        color = Color(0xFFE74C3C), // Red background
-                        shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)
+                        color = RedPrimary,
+                        shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp)
                     )
-                    .padding(12.dp),
+                    .padding(16.dp),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -197,36 +190,21 @@ fun RentalScreen(
                     Icon(
                         Icons.Default.Person,
                         contentDescription = "Profile",
-                        tint = Color.White,
-                        modifier = Modifier.size(24.dp)
+                        tint = White,
+                        modifier = Modifier.size(28.dp)
                     )
                     Spacer(modifier = Modifier.width(8.dp))
-                    Text(
-                        text = "Profile",
-                        color = Color.White,
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight.SemiBold
-                    )
+                    Text("Profil", color = White, style = MaterialTheme.typography.labelLarge)
                 }
-                
-                // Logout Button
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.clickable { onLogout() }
+                Button(
+                    onClick = onLogout,
+                    colors = ButtonDefaults.buttonColors(containerColor = White),
+                    shape = RoundedCornerShape(14.dp),
+                    elevation = ButtonDefaults.buttonElevation(defaultElevation = 4.dp)
                 ) {
-                    Icon(
-                        Icons.Default.Logout,
-                        contentDescription = "Logout",
-                        tint = Color.White,
-                        modifier = Modifier.size(24.dp)
-                    )
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Text(
-                        text = "Logout",
-                        color = Color.White,
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight.SemiBold
-                    )
+                    Icon(Icons.Default.Logout, contentDescription = "Logout", tint = RedPrimary)
+                    Spacer(modifier = Modifier.width(6.dp))
+                    Text("Logout", color = RedPrimary, style = MaterialTheme.typography.labelLarge)
                 }
             }
         }
@@ -409,6 +387,16 @@ fun RentalTable(rentals: List<Rental>) {
                     )
                 }
             }
+        }
+    }
+} 
+
+@Preview(showBackground = true, name = "RentalScreen Preview")
+@Composable
+fun PreviewRentalScreen() {
+    KKPTheme {
+        Box(Modifier.height(600.dp).fillMaxWidth()) {
+            RentalScreen()
         }
     }
 } 

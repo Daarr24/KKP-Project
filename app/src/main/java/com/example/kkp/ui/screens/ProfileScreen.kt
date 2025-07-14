@@ -22,6 +22,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.kkp.ui.theme.*
 import com.example.kkp.viewmodel.AuthViewModel
+import androidx.compose.ui.tooling.preview.Preview
+import com.example.kkp.ui.theme.KKPTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -35,29 +37,30 @@ fun ProfileScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("User Profile") },
+                title = { Text("User Profile", style = MaterialTheme.typography.headlineSmall, color = RedPrimary) },
                 navigationIcon = {
                     IconButton(onClick = onNavigateBack) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = "Back")
+                        Icon(Icons.Default.ArrowBack, contentDescription = "Back", tint = RedPrimary)
                     }
                 },
                 actions = {
                     IconButton(onClick = onLogout) {
-                        Icon(Icons.Default.Logout, contentDescription = "Logout")
+                        Icon(Icons.Default.Logout, contentDescription = "Logout", tint = RedPrimary)
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = GlassBg.copy(alpha = 0.85f)
+                    containerColor = White,
+                    titleContentColor = RedPrimary
                 )
             )
         },
-        containerColor = GlassBg
+        containerColor = WhiteSoft
     ) { paddingValues ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .padding(24.dp),
+                .padding(28.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             // Profile Image
@@ -66,8 +69,8 @@ fun ProfileScreen(
                     .size(140.dp)
                     .padding(top = 32.dp),
                 shape = CircleShape,
-                colors = CardDefaults.cardColors(containerColor = NeonBlue),
-                elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
+                colors = CardDefaults.cardColors(containerColor = RedPrimary),
+                elevation = CardDefaults.cardElevation(defaultElevation = 10.dp)
             ) {
                 Box(
                     modifier = Modifier.fillMaxSize(),
@@ -76,74 +79,65 @@ fun ProfileScreen(
                     Icon(
                         Icons.Default.Person,
                         contentDescription = "Profile",
-                        tint = Color.White,
+                        tint = White,
                         modifier = Modifier.size(80.dp)
                     )
                 }
             }
-            
             // User Name
             Text(
                 text = userInfo?.second ?: "Danu Febri Andi Prasetyo",
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Bold,
-                color = Color.White,
+                style = MaterialTheme.typography.headlineSmall,
+                color = RedPrimary,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.padding(top = 16.dp)
             )
-            
             // User Email
             Text(
                 text = userInfo?.third ?: "danuprasetya573@gmail.com",
-                fontSize = 16.sp,
-                color = Color.White.copy(alpha = 0.7f),
+                style = MaterialTheme.typography.bodyLarge,
+                color = GrayDark,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.padding(top = 8.dp)
             )
-            
             // User Level/Role
             Card(
                 modifier = Modifier.padding(top = 12.dp),
-                colors = CardDefaults.cardColors(containerColor = NeonBlue.copy(alpha = 0.2f)),
+                colors = CardDefaults.cardColors(containerColor = RedPrimary.copy(alpha = 0.1f)),
                 shape = RoundedCornerShape(20.dp)
             ) {
                 Text(
                     text = "Asset Manager",
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = NeonBlue,
+                    style = MaterialTheme.typography.labelLarge,
+                    color = RedPrimary,
                     textAlign = TextAlign.Center,
                     modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
                 )
             }
-            
             // Additional Profile Information
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 32.dp),
-                colors = CardDefaults.cardColors(containerColor = CardBg),
+                colors = CardDefaults.cardColors(containerColor = White),
                 shape = RoundedCornerShape(16.dp),
                 elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
             ) {
                 Column(
-                    modifier = Modifier.padding(20.dp)
+                    modifier = Modifier.padding(24.dp)
                 ) {
                     Text(
                         text = "Profile Information",
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = Color.White,
+                        style = MaterialTheme.typography.titleLarge,
+                        color = RedPrimary,
                         modifier = Modifier.padding(bottom = 16.dp)
                     )
-                    
                     ProfileInfoRow("User ID", userInfo?.first?.toString() ?: "1")
                     ProfileInfoRow("Email Verified", if (userInfo?.first != null) "Yes" else "No")
                     ProfileInfoRow("Member Since", "2025-06-28")
                     ProfileInfoRow("Last Updated", "2025-06-28")
                 }
             }
-            
             // Action Buttons
             Row(
                 modifier = Modifier
@@ -155,20 +149,22 @@ fun ProfileScreen(
                     onClick = { /* TODO: Edit Profile */ },
                     modifier = Modifier.weight(1f),
                     colors = ButtonDefaults.outlinedButtonColors(
-                        containerColor = Color.Transparent,
-                        contentColor = NeonBlue
+                        containerColor = White,
+                        contentColor = RedPrimary
                     ),
-                    border = androidx.compose.foundation.BorderStroke(1.dp, NeonBlue)
+                    border = androidx.compose.foundation.BorderStroke(2.dp, RedPrimary),
+                    shape = RoundedCornerShape(16.dp)
                 ) {
-                    Text("Edit Profile")
+                    Text("Edit Profile", style = MaterialTheme.typography.labelLarge)
                 }
-                
                 Button(
                     onClick = onLogout,
                     modifier = Modifier.weight(1f),
-                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFE74C3C))
+                    colors = ButtonDefaults.buttonColors(containerColor = RedPrimary),
+                    shape = RoundedCornerShape(16.dp),
+                    elevation = ButtonDefaults.buttonElevation(defaultElevation = 6.dp)
                 ) {
-                    Text("Logout")
+                    Text("Logout", style = MaterialTheme.typography.labelLarge, color = White)
                 }
             }
         }
@@ -188,14 +184,28 @@ fun ProfileInfoRow(
     ) {
         Text(
             text = label,
-            color = Color.White.copy(alpha = 0.7f),
-            fontSize = 14.sp
+            color = GrayDark,
+            style = MaterialTheme.typography.bodyMedium
         )
         Text(
             text = value,
-            color = Color.White,
-            fontSize = 14.sp,
+            color = RedPrimary,
+            style = MaterialTheme.typography.bodyMedium,
             fontWeight = FontWeight.Medium
         )
+    }
+} 
+
+@Preview(showBackground = true, name = "ProfileScreen Preview")
+@Composable
+fun PreviewProfileScreen() {
+    KKPTheme {
+        Box(Modifier.height(600.dp).fillMaxWidth()) {
+            ProfileScreen(
+                onNavigateBack = {},
+                onLogout = {},
+                authViewModel = viewModel() // Jika error, bisa gunakan mock AuthViewModel()
+            )
+        }
     }
 } 

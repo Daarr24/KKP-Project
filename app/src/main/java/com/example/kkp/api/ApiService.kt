@@ -7,109 +7,109 @@ import retrofit2.http.*
 interface ApiService {
     
     // Authentication
-    @POST("api/login")
+    @POST("vcom/login")
     suspend fun login(@Body loginRequest: LoginRequest): Response<LoginResponse>
     
     // Users
-    @GET("api/users")
+    @GET("vcom/users")
     suspend fun getUsers(): Response<List<User>>
     
-    @GET("api/users/{id}")
+    @GET("vcom/users/{id}")
     suspend fun getUser(@Path("id") id: Long): Response<User>
     
     // Assets
-    @GET("api/assets")
+    @GET("vcom/assets")
     suspend fun getAssets(): Response<List<Asset>>
     
-    @GET("api/assets/{id}")
+    @GET("vcom/assets/{id}")
     suspend fun getAsset(@Path("id") id: Long): Response<Asset>
     
-    @POST("api/assets")
+    @POST("vcom/assets")
     suspend fun createAsset(@Body assetRequest: AssetRequest): Response<Asset>
     
-    @PUT("api/assets/{id}")
+    @PUT("vcom/assets/{id}")
     suspend fun updateAsset(@Path("id") id: Long, @Body assetRequest: AssetRequest): Response<Asset>
     
-    @DELETE("api/assets/{id}")
+    @DELETE("vcom/assets/{id}")
     suspend fun deleteAsset(@Path("id") id: Long): Response<Unit>
     
     // Detail Assets
-    @GET("api/detail-assets")
+    @GET("vcom/detail-assets")
     suspend fun getDetailAssets(): Response<List<DetailAsset>>
     
-    @GET("api/detail-assets/{id}")
+    @GET("vcom/detail-assets/{id}")
     suspend fun getDetailAsset(@Path("id") id: Long): Response<DetailAsset>
     
-    @POST("api/detail-assets")
+    @POST("vcom/detail-assets")
     suspend fun createDetailAsset(@Body detailAssetRequest: DetailAssetRequest): Response<DetailAsset>
     
-    @PUT("api/detail-assets/{id}")
+    @PUT("vcom/detail-assets/{id}")
     suspend fun updateDetailAsset(@Path("id") id: Long, @Body detailAssetRequest: DetailAssetRequest): Response<DetailAsset>
     
-    @DELETE("api/detail-assets/{id}")
+    @DELETE("vcom/detail-assets/{id}")
     suspend fun deleteDetailAsset(@Path("id") id: Long): Response<Unit>
     
     // Projects
-    @GET("api/projects")
+    @GET("vcom/projects")
     suspend fun getProjects(): Response<List<Project>>
     
-    @GET("api/projects/{id}")
+    @GET("vcom/projects/{id}")
     suspend fun getProject(@Path("id") id: Long): Response<Project>
     
-    @POST("api/projects")
+    @POST("vcom/projects")
     suspend fun createProject(@Body projectRequest: ProjectRequest): Response<Project>
     
-    @PUT("api/projects/{id}")
+    @PUT("vcom/projects/{id}")
     suspend fun updateProject(@Path("id") id: Long, @Body projectRequest: ProjectRequest): Response<Project>
     
-    @DELETE("api/projects/{id}")
+    @DELETE("vcom/projects/{id}")
     suspend fun deleteProject(@Path("id") id: Long): Response<Unit>
     
     // Pengiriman
-    @GET("api/pengiriman")
+    @GET("vcom/pengiriman")
     suspend fun getPengiriman(): Response<List<Pengiriman>>
     
-    @GET("api/pengiriman/{id}")
+    @GET("vcom/pengiriman/{id}")
     suspend fun getPengirimanById(@Path("id") id: Long): Response<Pengiriman>
     
-    @POST("api/pengiriman")
+    @POST("vcom/pengiriman")
     suspend fun createPengiriman(@Body pengirimanRequest: PengirimanRequest): Response<Pengiriman>
     
-    @PUT("api/pengiriman/{id}")
+    @PUT("vcom/pengiriman/{id}")
     suspend fun updatePengiriman(@Path("id") id: Long, @Body pengirimanRequest: PengirimanRequest): Response<Pengiriman>
     
-    @DELETE("api/pengiriman/{id}")
+    @DELETE("vcom/pengiriman/{id}")
     suspend fun deletePengiriman(@Path("id") id: Long): Response<Unit>
     
     // Tagihan
-    @GET("api/tagihan")
+    @GET("vcom/tagihan")
     suspend fun getTagihan(): Response<List<Tagihan>>
     
-    @GET("api/tagihan/{id}")
+    @GET("vcom/tagihan/{id}")
     suspend fun getTagihanById(@Path("id") id: Long): Response<Tagihan>
     
-    @POST("api/tagihan")
+    @POST("vcom/tagihan")
     suspend fun createTagihan(@Body tagihanRequest: TagihanRequest): Response<Tagihan>
     
-    @PUT("api/tagihan/{id}")
+    @PUT("vcom/tagihan/{id}")
     suspend fun updateTagihan(@Path("id") id: Long, @Body tagihanRequest: TagihanRequest): Response<Tagihan>
     
-    @DELETE("api/tagihan/{id}")
+    @DELETE("vcom/tagihan/{id}")
     suspend fun deleteTagihan(@Path("id") id: Long): Response<Unit>
     
     // Rental
-    @GET("api/rental")
+    @GET("vcom/rental")
     suspend fun getRental(): Response<List<Rental>>
     
-    @GET("api/rental/{id}")
+    @GET("vcom/rental/{id}")
     suspend fun getRentalById(@Path("id") id: Long): Response<Rental>
     
-    @POST("api/rental")
+    @POST("vcom/rental")
     suspend fun createRental(@Body rentalRequest: RentalRequest): Response<Rental>
     
-    @PUT("api/rental/{id}")
+    @PUT("vcom/rental/{id}")
     suspend fun updateRental(@Path("id") id: Long, @Body rentalRequest: RentalRequest): Response<Rental>
     
-    @DELETE("api/rental/{id}")
+    @DELETE("vcom/rental/{id}")
     suspend fun deleteRental(@Path("id") id: Long): Response<Unit>
 } 

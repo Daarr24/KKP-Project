@@ -12,9 +12,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 
 // Database configuration
 $host = 'localhost';
-$dbname = 'u241440732_management-asset';
-$username = 'u241440732_'; // Username database Hostinger
-$password = '#tUQx:rv*zh2'; // Password database Hostinger
+$dbname = 'management-asset';
+$username = 'root'; // Username database Hostinger
+$password = ''; // Password database Hostinger
 
 try {
     $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8mb4", $username, $password);

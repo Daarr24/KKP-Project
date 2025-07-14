@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <network-security-config>
     <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="true">plum-cormorant-951249.hostingersite.com</domain>
         <domain includeSubdomains="true">deeppink-horse-271160.hostingersite.com</domain>
         <domain includeSubdomains="true">hostingersite.com</domain>
         <domain includeSubdomains="true">localhost</domain>

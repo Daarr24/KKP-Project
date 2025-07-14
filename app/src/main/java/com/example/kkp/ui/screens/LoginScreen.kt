@@ -29,6 +29,16 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.kkp.R
 import com.example.kkp.viewmodel.AuthViewModel
 import com.example.kkp.viewmodel.LoginState
+import androidx.compose.foundation.background
+import androidx.compose.foundation.shape.RoundedCornerShape
+import com.example.kkp.ui.theme.RedPrimary
+import com.example.kkp.ui.theme.GrayDark
+import com.example.kkp.ui.theme.WhiteSoft
+import com.example.kkp.ui.theme.GrayMedium
+import com.example.kkp.ui.theme.White
+import androidx.compose.ui.tooling.preview.Preview
+import com.example.kkp.ui.theme.KKPTheme
+import androidx.lifecycle.viewmodel.compose.viewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -58,7 +68,8 @@ fun LoginScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(24.dp)
+            .background(WhiteSoft)
+            .padding(32.dp)
             .verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
@@ -71,34 +82,31 @@ fun LoginScreen(
                 .size(120.dp)
                 .padding(bottom = 32.dp)
         )
-        
         // Title
         Text(
             text = "Asset Management",
             style = MaterialTheme.typography.headlineMedium,
-            fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.primary,
+            color = RedPrimary,
             textAlign = TextAlign.Center,
             modifier = Modifier.padding(bottom = 8.dp)
         )
-        
         Text(
             text = "Sign in to your account",
             style = MaterialTheme.typography.bodyLarge,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            color = GrayDark,
             textAlign = TextAlign.Center,
             modifier = Modifier.padding(bottom = 32.dp)
         )
-        
         // Email Field
         OutlinedTextField(
             value = email,
             onValueChange = { email = it },
-            label = { Text("Email") },
+            label = { Text("Email", style = MaterialTheme.typography.labelLarge, color = GrayDark) },
             leadingIcon = {
                 Icon(
                     imageVector = Icons.Default.Email,
-                    contentDescription = "Email"
+                    contentDescription = "Email",
+                    tint = RedPrimary
                 )
             },
             keyboardOptions = KeyboardOptions(
@@ -108,25 +116,40 @@ fun LoginScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 16.dp),
-            singleLine = true
+            singleLine = true,
+            shape = RoundedCornerShape(16.dp),
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedBorderColor = RedPrimary,
+                unfocusedBorderColor = GrayMedium,
+                cursorColor = RedPrimary,
+                focusedLabelColor = GrayDark,
+                unfocusedLabelColor = GrayDark,
+                focusedTextColor = GrayDark,
+                unfocusedTextColor = GrayDark,
+                disabledTextColor = GrayDark,
+                disabledLabelColor = GrayDark,
+                disabledBorderColor = GrayMedium,
+                errorTextColor = RedPrimary
+            )
         )
-        
         // Password Field
         OutlinedTextField(
             value = password,
             onValueChange = { password = it },
-            label = { Text("Password") },
+            label = { Text("Password", style = MaterialTheme.typography.labelLarge, color = GrayDark) },
             leadingIcon = {
                 Icon(
                     imageVector = Icons.Default.Lock,
-                    contentDescription = "Password"
+                    contentDescription = "Password",
+                    tint = RedPrimary
                 )
             },
             trailingIcon = {
                 IconButton(onClick = { passwordVisible = !passwordVisible }) {
                     Icon(
                         imageVector = if (passwordVisible) Icons.Default.VisibilityOff else Icons.Default.Visibility,
-                        contentDescription = if (passwordVisible) "Hide password" else "Show password"
+                        contentDescription = if (passwordVisible) "Hide password" else "Show password",
+                        tint = RedPrimary
                     )
                 }
             },
@@ -138,9 +161,22 @@ fun LoginScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 24.dp),
-            singleLine = true
+            singleLine = true,
+            shape = RoundedCornerShape(16.dp),
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedBorderColor = RedPrimary,
+                unfocusedBorderColor = GrayMedium,
+                cursorColor = RedPrimary,
+                focusedLabelColor = GrayDark,
+                unfocusedLabelColor = GrayDark,
+                focusedTextColor = GrayDark,
+                unfocusedTextColor = GrayDark,
+                disabledTextColor = GrayDark,
+                disabledLabelColor = GrayDark,
+                disabledBorderColor = GrayMedium,
+                errorTextColor = RedPrimary
+            )
         )
-        
         // Login Button
         Button(
             onClick = {
@@ -151,60 +187,47 @@ fun LoginScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(56.dp),
-            enabled = email.isNotEmpty() && password.isNotEmpty() && loginState !is LoginState.Loading
+            enabled = email.isNotEmpty() && password.isNotEmpty() && loginState !is LoginState.Loading,
+            colors = ButtonDefaults.buttonColors(containerColor = RedPrimary),
+            shape = RoundedCornerShape(16.dp),
+            elevation = ButtonDefaults.buttonElevation(defaultElevation = 6.dp)
         ) {
             if (loginState is LoginState.Loading) {
                 CircularProgressIndicator(
                     modifier = Modifier.size(24.dp),
-                    color = MaterialTheme.colorScheme.onPrimary
+                    color = White
                 )
             } else {
                 Text(
                     text = "Sign In",
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Medium
+                    style = MaterialTheme.typography.labelLarge,
+                    color = White
                 )
             }
         }
-        
         // Error Message
         if (loginState is LoginState.Error) {
             Text(
                 text = (loginState as LoginState.Error).message,
-                color = MaterialTheme.colorScheme.error,
+                color = RedPrimary,
                 style = MaterialTheme.typography.bodyMedium,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.padding(top = 16.dp)
             )
         }
-        
-        // Demo Credentials
-        Card(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 32.dp),
-            colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.surfaceVariant
+        // Hapus card demo credential
+    }
+}
+
+@Preview(showBackground = true, name = "LoginScreen Preview")
+@Composable
+fun PreviewLoginScreen() {
+    KKPTheme {
+        Box(Modifier.height(600.dp).fillMaxWidth()) {
+            LoginScreen(
+                onLoginSuccess = {},
+                authViewModel = viewModel() // Jika error, bisa gunakan mock AuthViewModel()
             )
-        ) {
-            Column(
-                modifier = Modifier.padding(16.dp)
-            ) {
-                Text(
-                    text = "Demo Credentials:",
-                    style = MaterialTheme.typography.titleSmall,
-                    fontWeight = FontWeight.Medium,
-                    modifier = Modifier.padding(bottom = 8.dp)
-                )
-                Text(
-                    text = "Email: danuprasetya573@gmail.com",
-                    style = MaterialTheme.typography.bodySmall
-                )
-                Text(
-                    text = "Password: (check database for hashed password)",
-                    style = MaterialTheme.typography.bodySmall
-                )
-            }
         }
     }
 } 

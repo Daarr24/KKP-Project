@@ -28,6 +28,8 @@ import com.example.kkp.viewmodel.AuthViewModel
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.kkp.ui.theme.KKPTheme
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.kkp.model.DashboardData
+import androidx.compose.runtime.LaunchedEffect
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -42,6 +44,13 @@ fun DashboardScreen(
     authViewModel: AuthViewModel
 ) {
     val userInfo by authViewModel.userInfo.collectAsStateWithLifecycle()
+    val dashboardData by authViewModel.dashboardData.collectAsStateWithLifecycle()
+    val dashboardLoading by authViewModel.dashboardLoading.collectAsStateWithLifecycle()
+    val dashboardError by authViewModel.dashboardError.collectAsStateWithLifecycle()
+
+    LaunchedEffect(Unit) {
+        authViewModel.fetchDashboard()
+    }
     
     val menuItems = rememberMenuItems(
         onNavigateToAssets = onNavigateToAssets,
@@ -109,79 +118,39 @@ fun DashboardScreen(
                     )
                 }
             }
-            // Visualizations
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 24.dp),
-                horizontalArrangement = Arrangement.spacedBy(16.dp)
-            ) {
-                Card(
-                    modifier = Modifier
-                        .weight(1f)
-                        .height(180.dp),
-                    colors = CardDefaults.cardColors(containerColor = White),
-                    elevation = CardDefaults.cardElevation(defaultElevation = 6.dp)
+            // Statistik utama
+            if (dashboardLoading) {
+                Box(Modifier.fillMaxWidth().padding(24.dp), contentAlignment = Alignment.Center) {
+                    CircularProgressIndicator()
+                }
+            } else if (dashboardError != null) {
+                Box(Modifier.fillMaxWidth().padding(24.dp), contentAlignment = Alignment.Center) {
+                    Text(dashboardError ?: "Error", color = RedPrimary)
+                }
+            } else if (dashboardData != null) {
+                Row(
+                    Modifier.fillMaxWidth().padding(bottom = 16.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Column(
-                        modifier = Modifier.padding(12.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Text(
-                            text = "Assets by Category",
-                            style = MaterialTheme.typography.titleLarge,
-                            color = RedPrimary
-                        )
-                        Spacer(modifier = Modifier.height(8.dp))
-                        // Placeholder for chart
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(120.dp)
-                                .background(RedPrimary.copy(alpha = 0.08f), RoundedCornerShape(8.dp)),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Text(
-                                text = "Chart Placeholder",
-                                color = GrayDark,
-                                style = MaterialTheme.typography.bodySmall
-                            )
-                        }
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        Text("Total Asset", style = MaterialTheme.typography.titleMedium, color = RedPrimary)
+                        Text(dashboardData!!.totalAsset.toString(), style = MaterialTheme.typography.headlineMedium, color = Black)
+                    }
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        Text("Total Rental", style = MaterialTheme.typography.titleMedium, color = BlueInfo)
+                        Text(dashboardData!!.totalRental.toString(), style = MaterialTheme.typography.headlineMedium, color = Black)
+                    }
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        Text("Bulan", style = MaterialTheme.typography.titleMedium, color = NeonGreen)
+                        Text("${dashboardData!!.monthName} ${dashboardData!!.year}", style = MaterialTheme.typography.bodyLarge, color = Black)
                     }
                 }
-                Card(
-                    modifier = Modifier
-                        .weight(1f)
-                        .height(180.dp),
-                    colors = CardDefaults.cardColors(containerColor = White),
-                    elevation = CardDefaults.cardElevation(defaultElevation = 6.dp)
-                ) {
-                    Column(
-                        modifier = Modifier.padding(12.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Text(
-                            text = "Rental Status",
-                            style = MaterialTheme.typography.titleLarge,
-                            color = BlueInfo
-                        )
-                        Spacer(modifier = Modifier.height(8.dp))
-                        // Placeholder for chart
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(120.dp)
-                                .background(BlueInfo.copy(alpha = 0.08f), RoundedCornerShape(8.dp)),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Text(
-                                text = "Chart Placeholder",
-                                color = GrayDark,
-                                style = MaterialTheme.typography.bodySmall
-                            )
-                        }
-                    }
-                }
+                // Bar Chart
+                BarChartSection(dashboardData!!)
+                Spacer(Modifier.height(16.dp))
+                // Pie Chart
+                PieChartSection(dashboardData!!)
+                Spacer(Modifier.height(16.dp))
             }
             // Menu Grid
             LazyVerticalGrid(
@@ -324,6 +293,46 @@ fun PreviewDashboardScreen() {
                 onNavigateToProfile = {},
                 authViewModel = viewModel() // Jika error, bisa gunakan mock AuthViewModel()
             )
+        }
+    }
+} 
+
+@Composable
+fun BarChartSection(data: DashboardData) {
+    // Implementasi bar chart sederhana (custom drawing atau gunakan library jika ada)
+    // Untuk demo, tampilkan data sebagai teks
+    Column(Modifier.fillMaxWidth().background(White, RoundedCornerShape(12.dp)).padding(16.dp)) {
+        Text("Asset & Rental per Bulan", style = MaterialTheme.typography.titleMedium, color = RedPrimary)
+        Spacer(Modifier.height(8.dp))
+        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+            data.months.forEachIndexed { idx, month ->
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Text(month, style = MaterialTheme.typography.bodySmall)
+                    // Bar asset
+                    Box(Modifier.width(12.dp).height((data.assetPerMonth[idx] * 10).dp).background(RedPrimary, RoundedCornerShape(4.dp)))
+                    // Bar rental
+                    Box(Modifier.width(12.dp).height((data.rentPerMonth[idx] * 10).dp).background(BlueInfo, RoundedCornerShape(4.dp)).padding(top = 2.dp))
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun PieChartSection(data: DashboardData) {
+    // Implementasi pie chart sederhana (custom drawing atau gunakan library jika ada)
+    // Untuk demo, tampilkan data sebagai list warna dan label
+    Column(Modifier.fillMaxWidth().background(White, RoundedCornerShape(12.dp)).padding(16.dp)) {
+        Text("Distribusi Asset", style = MaterialTheme.typography.titleMedium, color = RedPrimary)
+        Spacer(Modifier.height(8.dp))
+        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
+            data.pieLabels.forEachIndexed { idx, label ->
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Box(Modifier.size(24.dp).background(Color(android.graphics.Color.parseColor(data.pieColors[idx])), RoundedCornerShape(12.dp)))
+                    Text(label, style = MaterialTheme.typography.bodySmall)
+                    Text(data.pieData[idx].toString(), style = MaterialTheme.typography.bodySmall, color = Black)
+                }
+            }
         }
     }
 } 

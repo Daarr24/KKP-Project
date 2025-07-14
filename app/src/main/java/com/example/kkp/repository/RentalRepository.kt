@@ -2,6 +2,7 @@ package com.example.kkp.repository
 
 import com.example.kkp.api.NetworkModule
 import com.example.kkp.model.*
+import com.google.gson.annotations.SerializedName
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -176,9 +177,24 @@ class RentalRepository {
             try {
                 val response = NetworkModule.apiService.getProjects()
                 if (response.isSuccessful) {
-                    Result.success(response.body() ?: emptyList())
+                    Result.success(response.body()?.data ?: emptyList())
                 } else {
                     Result.failure(Exception("Failed to fetch projects: ${response.code()}"))
+                }
+            } catch (e: Exception) {
+                Result.failure(e)
+            }
+        }
+    }
+
+    suspend fun getProject(id: Long): Result<Project> {
+        return withContext(Dispatchers.IO) {
+            try {
+                val response = NetworkModule.apiService.getProject(id)
+                if (response.isSuccessful) {
+                    Result.success(response.body()?.data ?: throw Exception("Project not found"))
+                } else {
+                    Result.failure(Exception("Failed to fetch project: ${response.code()}"))
                 }
             } catch (e: Exception) {
                 Result.failure(e)

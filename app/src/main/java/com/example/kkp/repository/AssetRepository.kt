@@ -2,6 +2,7 @@ package com.example.kkp.repository
 
 import com.example.kkp.api.NetworkModule
 import com.example.kkp.model.*
+import com.google.gson.annotations.SerializedName
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -12,7 +13,7 @@ class AssetRepository {
             try {
                 val response = NetworkModule.apiService.getAssets()
                 if (response.isSuccessful) {
-                    Result.success(response.body() ?: emptyList())
+                    Result.success(response.body()?.data ?: emptyList())
                 } else {
                     Result.failure(Exception("Failed to fetch assets: ${response.code()}"))
                 }

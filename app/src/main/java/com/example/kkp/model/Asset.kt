@@ -21,8 +21,8 @@ data class Asset(
     @SerializedName("updated_at")
     val updatedAt: String?,
     
-    @SerializedName("detail_assets")
-    val detailAssets: List<DetailAsset>? = null
+    @SerializedName("detailassets")
+    val detailassets: List<DetailAsset>? = null
 )
 
 data class DetailAsset(

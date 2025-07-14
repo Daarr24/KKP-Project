@@ -190,10 +190,10 @@ fun AssetCard(asset: Asset) {
                 style = MaterialTheme.typography.bodySmall,
                 color = GrayDark
             )
-            if (asset.detailAssets?.isNotEmpty() == true) {
+            if (asset.detailassets?.isNotEmpty() == true) {
                 Spacer(modifier = Modifier.height(10.dp))
                 Text(
-                    text = "Detail Assets: ${asset.detailAssets.size}",
+                    text = "Detail Assets: ${asset.detailassets.size}",
                     style = MaterialTheme.typography.bodySmall,
                     color = RedPrimary
                 )

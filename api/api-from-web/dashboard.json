@@ -1,0 +1,1 @@
+{"status":"success","message":"Dashboard data fetched successfully","data":{"totalasset":7,"totalrental":6,"months":["Feb","Mar","Apr","May","Jun","Jul"],"assetPerMonth":[0,0,0,0,0,7],"rentPerMonth":[0,0,0,0,0,6],"pieLabels":["iForte","Huawei MS IOH","Huawei MS XL"],"pieData":[3,1,2],"pieColors":["#0077FF","#FFDE59","#3B3F40"],"monthName":"July","year":2025}}

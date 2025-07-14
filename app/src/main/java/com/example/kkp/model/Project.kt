@@ -14,13 +14,16 @@ data class Project(
     val durasiKontrak: Int,
     
     @SerializedName("harga_sewa")
-    val hargaSewa: BigDecimal,
+    val hargaSewa: String,
     
     @SerializedName("created_at")
     val createdAt: String?,
     
     @SerializedName("updated_at")
-    val updatedAt: String?
+    val updatedAt: String?,
+    
+    @SerializedName("rentals")
+    val rentals: List<Rental>? = null
 )
 
 data class ProjectRequest(

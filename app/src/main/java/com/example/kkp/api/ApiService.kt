@@ -1,6 +1,9 @@
 package com.example.kkp.api
 
 import com.example.kkp.model.*
+import com.example.kkp.model.AssetListResponse
+import com.example.kkp.model.ProjectListResponse
+import com.example.kkp.model.ProjectDetailResponse
 import retrofit2.Response
 import retrofit2.http.*
 
@@ -18,8 +21,8 @@ interface ApiService {
     suspend fun getUser(@Path("id") id: Long): Response<User>
     
     // Assets
-    @GET("vcom/assets")
-    suspend fun getAssets(): Response<List<Asset>>
+    @GET("vcom/asset")
+    suspend fun getAssets(): Response<AssetListResponse>
     
     @GET("vcom/assets/{id}")
     suspend fun getAsset(@Path("id") id: Long): Response<Asset>
@@ -50,11 +53,11 @@ interface ApiService {
     suspend fun deleteDetailAsset(@Path("id") id: Long): Response<Unit>
     
     // Projects
-    @GET("vcom/projects")
-    suspend fun getProjects(): Response<List<Project>>
+    @GET("vcom/project")
+    suspend fun getProjects(): Response<ProjectListResponse>
     
-    @GET("vcom/projects/{id}")
-    suspend fun getProject(@Path("id") id: Long): Response<Project>
+    @GET("vcom/project/{id}")
+    suspend fun getProject(@Path("id") id: Long): Response<ProjectDetailResponse>
     
     @POST("vcom/projects")
     suspend fun createProject(@Body projectRequest: ProjectRequest): Response<Project>
@@ -112,4 +115,8 @@ interface ApiService {
     
     @DELETE("vcom/rental/{id}")
     suspend fun deleteRental(@Path("id") id: Long): Response<Unit>
+    
+    // Dashboard
+    @GET("vcom/dashboard")
+    suspend fun getDashboard(): Response<DashboardResponse>
 } 

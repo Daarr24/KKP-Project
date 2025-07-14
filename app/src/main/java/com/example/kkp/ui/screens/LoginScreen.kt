@@ -57,6 +57,7 @@ fun LoginScreen(
         when (loginState) {
             is LoginState.Success -> {
                 onLoginSuccess()
+                authViewModel.resetLoginState() // Reset state setelah navigasi
             }
             is LoginState.Error -> {
                 // Show error message

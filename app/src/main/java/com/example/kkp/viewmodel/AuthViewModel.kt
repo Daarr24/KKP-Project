@@ -8,6 +8,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import com.example.kkp.model.DashboardData
+import com.example.kkp.model.DashboardResponse
+import com.example.kkp.api.NetworkModule
 
 class AuthViewModel : ViewModel() {
     
@@ -22,6 +25,14 @@ class AuthViewModel : ViewModel() {
     private val _userInfo = MutableStateFlow<Triple<Long, String, String>?>(authRepository.getUserInfo())
     val userInfo: StateFlow<Triple<Long, String, String>?> = _userInfo.asStateFlow()
     
+    // Tambahan untuk dashboard
+    private val _dashboardData = MutableStateFlow<DashboardData?>(null)
+    val dashboardData: StateFlow<DashboardData?> = _dashboardData.asStateFlow()
+    private val _dashboardLoading = MutableStateFlow(false)
+    val dashboardLoading: StateFlow<Boolean> = _dashboardLoading.asStateFlow()
+    private val _dashboardError = MutableStateFlow<String?>(null)
+    val dashboardError: StateFlow<String?> = _dashboardError.asStateFlow()
+
     fun login(email: String, password: String) {
         viewModelScope.launch {
             _loginState.value = LoginState.Loading
@@ -49,6 +60,25 @@ class AuthViewModel : ViewModel() {
     
     fun resetLoginState() {
         _loginState.value = LoginState.Idle
+    }
+
+    fun fetchDashboard() {
+        viewModelScope.launch {
+            _dashboardLoading.value = true
+            _dashboardError.value = null
+            try {
+                val response = NetworkModule.apiService.getDashboard()
+                if (response.isSuccessful && response.body() != null) {
+                    _dashboardData.value = response.body()!!.data
+                } else {
+                    _dashboardError.value = response.body()?.message ?: "Failed to fetch dashboard"
+                }
+            } catch (e: Exception) {
+                _dashboardError.value = e.message
+            } finally {
+                _dashboardLoading.value = false
+            }
+        }
     }
 }
 

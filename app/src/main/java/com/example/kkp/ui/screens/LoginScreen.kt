@@ -56,27 +56,26 @@ fun LoginScreen(
     val loginState by authViewModel.loginState.collectAsStateWithLifecycle()
     val context = LocalContext.current
     
+    // Handle navigation based on login state
     LaunchedEffect(loginState) {
-        when (val currentState = loginState) {
-            is LoginState.Success -> {
-                Log.d("LoginScreen", "Login successful, navigating to dashboard...")
-                // Reset state first to prevent re-triggering
-                authViewModel.resetLoginState()
-                // Then navigate
-                navController.navigate("dashboard") {
-                    popUpTo("login") { inclusive = true }
-                }
-                Log.d("LoginScreen", "Navigation to dashboard completed")
+        // Extract state to avoid smart cast issues
+        val currentState = loginState
+        
+        if (currentState is LoginState.Success) {
+            Log.d("LoginScreen", "Login successful, navigating to dashboard...")
+            // Reset state first to prevent re-triggering
+            authViewModel.resetLoginState()
+            // Then navigate
+            navController.navigate("dashboard") {
+                popUpTo("login") { inclusive = true }
             }
-            is LoginState.Error -> {
-                Log.e("LoginScreen", "Login error: ${currentState.message}")
-            }
-            is LoginState.Loading -> {
-                Log.d("LoginScreen", "Login in progress...")
-            }
-            else -> {
-                Log.d("LoginScreen", "Login state: $currentState")
-            }
+            Log.d("LoginScreen", "Navigation to dashboard completed")
+        } else if (currentState is LoginState.Error) {
+            Log.e("LoginScreen", "Login error: ${currentState.message}")
+        } else if (currentState is LoginState.Loading) {
+            Log.d("LoginScreen", "Login in progress...")
+        } else {
+            Log.d("LoginScreen", "Login state: $currentState")
         }
     }
     
@@ -192,6 +191,11 @@ fun LoginScreen(
                 errorTextColor = RedPrimary
             )
         )
+        
+        // Extract loading state to avoid smart cast
+        val isLoading = loginState is LoginState.Loading
+        val isButtonEnabled = email.isNotEmpty() && password.isNotEmpty() && !isLoading
+        
         // Login Button
         Button(
             onClick = {
@@ -202,12 +206,12 @@ fun LoginScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(56.dp),
-            enabled = email.isNotEmpty() && password.isNotEmpty() && loginState !is LoginState.Loading,
+            enabled = isButtonEnabled,
             colors = ButtonDefaults.buttonColors(containerColor = RedPrimary),
             shape = RoundedCornerShape(16.dp),
             elevation = ButtonDefaults.buttonElevation(defaultElevation = 6.dp)
         ) {
-            if (loginState is LoginState.Loading) {
+            if (isLoading) {
                 CircularProgressIndicator(
                     modifier = Modifier.size(24.dp),
                     color = White
@@ -220,20 +224,19 @@ fun LoginScreen(
                 )
             }
         }
-        // Error Message
-        when (val currentState = loginState) {
-            is LoginState.Error -> {
-                Text(
-                    text = currentState.message,
-                    color = RedPrimary,
-                    style = MaterialTheme.typography.bodyMedium,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.padding(top = 16.dp)
-                )
-            }
-            else -> { /* No error to display */ }
+        
+        // Error Message - extract error message to avoid smart cast
+        val currentState = loginState
+        if (currentState is LoginState.Error) {
+            val errorMessage = currentState.message
+            Text(
+                text = errorMessage,
+                color = RedPrimary,
+                style = MaterialTheme.typography.bodyMedium,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.padding(top = 16.dp)
+            )
         }
-        // Hapus card demo credential
     }
 }
 
@@ -243,8 +246,8 @@ fun PreviewLoginScreen() {
     KKPTheme {
         Box(Modifier.height(600.dp).fillMaxWidth()) {
             LoginScreen(
-                authViewModel = viewModel(), // Jika error, bisa gunakan mock AuthViewModel()
-                navController = rememberNavController() // Mock NavController for preview
+                authViewModel = viewModel(),
+                navController = rememberNavController()
             )
         }
     }

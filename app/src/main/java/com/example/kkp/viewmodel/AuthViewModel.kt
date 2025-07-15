@@ -22,6 +22,11 @@ class AuthViewModel : ViewModel() {
     private val _isLoggedIn = MutableStateFlow(authRepository.isLoggedIn())
     val isLoggedIn: StateFlow<Boolean> = _isLoggedIn.asStateFlow()
     
+    init {
+        // Ensure state is always up-to-date
+        _isLoggedIn.value = authRepository.isLoggedIn()
+    }
+    
     private val _userInfo = MutableStateFlow<Triple<Long, String, String>?>(authRepository.getUserInfo())
     val userInfo: StateFlow<Triple<Long, String, String>?> = _userInfo.asStateFlow()
     
@@ -40,8 +45,10 @@ class AuthViewModel : ViewModel() {
             val result = authRepository.login(email, password)
             result.fold(
                 onSuccess = { response ->
-                    _isLoggedIn.value = true
+                    // Update login state first
                     _loginState.value = LoginState.Success(response)
+                    // Then update other states
+                    _isLoggedIn.value = true
                     _userInfo.value = authRepository.getUserInfo()
                 },
                 onFailure = { exception ->
@@ -56,6 +63,8 @@ class AuthViewModel : ViewModel() {
         _isLoggedIn.value = false
         _userInfo.value = null
         _loginState.value = LoginState.Idle
+        _dashboardData.value = null
+        _dashboardError.value = null
     }
     
     fun resetLoginState() {

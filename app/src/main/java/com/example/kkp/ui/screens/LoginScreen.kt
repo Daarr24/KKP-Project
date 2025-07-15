@@ -45,7 +45,6 @@ import androidx.navigation.compose.rememberNavController
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginScreen(
-    onLoginSuccess: () -> Unit,
     authViewModel: AuthViewModel,
     navController: NavController
 ) {
@@ -231,7 +230,6 @@ fun PreviewLoginScreen() {
     KKPTheme {
         Box(Modifier.height(600.dp).fillMaxWidth()) {
             LoginScreen(
-                onLoginSuccess = {},
                 authViewModel = viewModel(), // Jika error, bisa gunakan mock AuthViewModel()
                 navController = rememberNavController() // Mock NavController for preview
             )

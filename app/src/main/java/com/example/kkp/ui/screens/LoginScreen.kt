@@ -221,14 +221,17 @@ fun LoginScreen(
             }
         }
         // Error Message
-        if (loginState is LoginState.Error) {
-            Text(
-                text = (loginState as LoginState.Error).message,
-                color = RedPrimary,
-                style = MaterialTheme.typography.bodyMedium,
-                textAlign = TextAlign.Center,
-                modifier = Modifier.padding(top = 16.dp)
-            )
+        when (val currentState = loginState) {
+            is LoginState.Error -> {
+                Text(
+                    text = currentState.message,
+                    color = RedPrimary,
+                    style = MaterialTheme.typography.bodyMedium,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.padding(top = 16.dp)
+                )
+            }
+            else -> { /* No error to display */ }
         }
         // Hapus card demo credential
     }

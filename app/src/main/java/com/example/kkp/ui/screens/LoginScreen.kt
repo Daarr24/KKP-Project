@@ -57,7 +57,7 @@ fun LoginScreen(
     val context = LocalContext.current
     
     LaunchedEffect(loginState) {
-        when (loginState) {
+        when (val currentState = loginState) {
             is LoginState.Success -> {
                 Log.d("LoginScreen", "Login successful, navigating to dashboard...")
                 // Reset state first to prevent re-triggering
@@ -69,13 +69,13 @@ fun LoginScreen(
                 Log.d("LoginScreen", "Navigation to dashboard completed")
             }
             is LoginState.Error -> {
-                Log.e("LoginScreen", "Login error: ${loginState.message}")
+                Log.e("LoginScreen", "Login error: ${currentState.message}")
             }
             is LoginState.Loading -> {
                 Log.d("LoginScreen", "Login in progress...")
             }
             else -> {
-                Log.d("LoginScreen", "Login state: $loginState")
+                Log.d("LoginScreen", "Login state: $currentState")
             }
         }
     }

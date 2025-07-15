@@ -56,9 +56,29 @@ fun LoginScreen(
     val loginState by authViewModel.loginState.collectAsStateWithLifecycle()
     val context = LocalContext.current
     
-    // SAFE navigation handling - no smart cast issues
+    // VERY SAFE navigation handling
     LaunchedEffect(loginState) {
-        handleLoginState(loginState, authViewModel, navController)
+        Log.d("LoginScreen", "Login state changed")
+        
+        // Check for success without smart cast
+        if (loginState.javaClass.simpleName == "Success") {
+            Log.d("LoginScreen", "Login successful, navigating to dashboard...")
+            authViewModel.resetLoginState()
+            navController.navigate("dashboard") {
+                popUpTo("login") { inclusive = true }
+            }
+            Log.d("LoginScreen", "Navigation completed")
+        }
+        
+        // Check for error without smart cast
+        if (loginState.javaClass.simpleName == "Error") {
+            Log.e("LoginScreen", "Login error occurred")
+        }
+        
+        // Check for loading without smart cast
+        if (loginState.javaClass.simpleName == "Loading") {
+            Log.d("LoginScreen", "Login in progress...")
+        }
     }
     
     Column(
@@ -93,6 +113,7 @@ fun LoginScreen(
             textAlign = TextAlign.Center,
             modifier = Modifier.padding(bottom = 32.dp)
         )
+        
         // Email Field
         OutlinedTextField(
             value = email,
@@ -128,6 +149,7 @@ fun LoginScreen(
                 errorTextColor = RedPrimary
             )
         )
+        
         // Password Field
         OutlinedTextField(
             value = password,
@@ -174,101 +196,48 @@ fun LoginScreen(
             )
         )
         
-        // Login Button
-        LoginButton(
-            email = email,
-            password = password,
-            loginState = loginState,
-            onLoginClick = { authViewModel.login(email, password) }
-        )
+        // Check loading state without smart cast
+        val isLoadingState = loginState.javaClass.simpleName == "Loading"
+        val isButtonEnabled = email.isNotEmpty() && password.isNotEmpty() && !isLoadingState
         
-        // Error Message
-        LoginErrorMessage(loginState = loginState)
-    }
-}
-
-// Separate function to handle login state - avoids smart cast issues
-private fun handleLoginState(
-    state: LoginState,
-    authViewModel: AuthViewModel,
-    navController: NavController
-) {
-    when (state) {
-        is LoginState.Success -> {
-            Log.d("LoginScreen", "Login successful, navigating to dashboard...")
-            authViewModel.resetLoginState()
-            navController.navigate("dashboard") {
-                popUpTo("login") { inclusive = true }
+        // Login Button
+        Button(
+            onClick = {
+                if (email.isNotEmpty() && password.isNotEmpty()) {
+                    authViewModel.login(email, password)
+                }
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(56.dp),
+            enabled = isButtonEnabled,
+            colors = ButtonDefaults.buttonColors(containerColor = RedPrimary),
+            shape = RoundedCornerShape(16.dp),
+            elevation = ButtonDefaults.buttonElevation(defaultElevation = 6.dp)
+        ) {
+            if (isLoadingState) {
+                CircularProgressIndicator(
+                    modifier = Modifier.size(24.dp),
+                    color = White
+                )
+            } else {
+                Text(
+                    text = "Sign In",
+                    style = MaterialTheme.typography.labelLarge,
+                    color = White
+                )
             }
-            Log.d("LoginScreen", "Navigation to dashboard completed")
         }
-        is LoginState.Error -> {
-            Log.e("LoginScreen", "Login error: ${state.message}")
-        }
-        is LoginState.Loading -> {
-            Log.d("LoginScreen", "Login in progress...")
-        }
-        else -> {
-            Log.d("LoginScreen", "Login state: $state")
-        }
-    }
-}
-
-// Separate composable for login button
-@Composable
-private fun LoginButton(
-    email: String,
-    password: String,
-    loginState: LoginState,
-    onLoginClick: () -> Unit
-) {
-    val isLoading = loginState is LoginState.Loading
-    val isEnabled = email.isNotEmpty() && password.isNotEmpty() && !isLoading
-    
-    Button(
-        onClick = {
-            if (email.isNotEmpty() && password.isNotEmpty()) {
-                onLoginClick()
-            }
-        },
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(56.dp),
-        enabled = isEnabled,
-        colors = ButtonDefaults.buttonColors(containerColor = RedPrimary),
-        shape = RoundedCornerShape(16.dp),
-        elevation = ButtonDefaults.buttonElevation(defaultElevation = 6.dp)
-    ) {
-        if (isLoading) {
-            CircularProgressIndicator(
-                modifier = Modifier.size(24.dp),
-                color = White
-            )
-        } else {
+        
+        // Error Message - Using string comparison to avoid smart cast
+        if (loginState.javaClass.simpleName == "Error") {
             Text(
-                text = "Sign In",
-                style = MaterialTheme.typography.labelLarge,
-                color = White
-            )
-        }
-    }
-}
-
-// Separate composable for error message
-@Composable
-private fun LoginErrorMessage(loginState: LoginState) {
-    when (loginState) {
-        is LoginState.Error -> {
-            Text(
-                text = loginState.message,
+                text = "Login error occurred. Please try again.",
                 color = RedPrimary,
                 style = MaterialTheme.typography.bodyMedium,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.padding(top = 16.dp)
             )
-        }
-        else -> {
-            // No error to display
         }
     }
 }

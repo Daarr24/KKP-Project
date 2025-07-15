@@ -53,12 +53,9 @@ fun KKPApp() {
     NavHost(navController = navController, startDestination = if (isLoggedIn) "dashboard" else "login") {
         composable("login") {
             LoginScreen(
-                onLoginSuccess = {
-                    navController.navigate("dashboard") {
-                        popUpTo("login") { inclusive = true }
-                    }
-                },
-                authViewModel = authViewModel
+                onLoginSuccess = {},
+                authViewModel = authViewModel,
+                navController = navController
             )
         }
         

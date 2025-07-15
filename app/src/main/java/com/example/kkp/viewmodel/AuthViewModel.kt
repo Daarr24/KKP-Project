@@ -40,8 +40,8 @@ class AuthViewModel : ViewModel() {
             val result = authRepository.login(email, password)
             result.fold(
                 onSuccess = { response ->
-                    _loginState.value = LoginState.Success(response)
                     _isLoggedIn.value = true
+                    _loginState.value = LoginState.Success(response)
                     _userInfo.value = authRepository.getUserInfo()
                 },
                 onFailure = { exception ->

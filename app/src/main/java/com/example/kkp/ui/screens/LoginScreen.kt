@@ -39,12 +39,15 @@ import com.example.kkp.ui.theme.White
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.kkp.ui.theme.KKPTheme
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginScreen(
     onLoginSuccess: () -> Unit,
-    authViewModel: AuthViewModel
+    authViewModel: AuthViewModel,
+    navController: NavController
 ) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -56,7 +59,9 @@ fun LoginScreen(
     LaunchedEffect(loginState) {
         when (loginState) {
             is LoginState.Success -> {
-                onLoginSuccess()
+                navController.navigate("dashboard") {
+                    popUpTo("login") { inclusive = true }
+                }
                 authViewModel.resetLoginState() // Reset state setelah navigasi
             }
             is LoginState.Error -> {
@@ -227,7 +232,8 @@ fun PreviewLoginScreen() {
         Box(Modifier.height(600.dp).fillMaxWidth()) {
             LoginScreen(
                 onLoginSuccess = {},
-                authViewModel = viewModel() // Jika error, bisa gunakan mock AuthViewModel()
+                authViewModel = viewModel(), // Jika error, bisa gunakan mock AuthViewModel()
+                navController = rememberNavController() // Mock NavController for preview
             )
         }
     }

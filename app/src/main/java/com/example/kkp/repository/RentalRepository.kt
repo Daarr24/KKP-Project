@@ -2,6 +2,8 @@ package com.example.kkp.repository
 
 import com.example.kkp.api.NetworkModule
 import com.example.kkp.model.*
+import com.example.kkp.model.ProjectListResponse
+import com.example.kkp.model.ProjectDetailResponse
 import com.google.gson.annotations.SerializedName
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext

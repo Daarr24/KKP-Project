@@ -41,6 +41,7 @@ import com.example.kkp.ui.theme.KKPTheme
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import android.util.Log
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -58,15 +59,24 @@ fun LoginScreen(
     LaunchedEffect(loginState) {
         when (loginState) {
             is LoginState.Success -> {
+                Log.d("LoginScreen", "Login successful, navigating to dashboard...")
+                // Reset state first to prevent re-triggering
+                authViewModel.resetLoginState()
+                // Then navigate
                 navController.navigate("dashboard") {
                     popUpTo("login") { inclusive = true }
                 }
-                authViewModel.resetLoginState() // Reset state setelah navigasi
+                Log.d("LoginScreen", "Navigation to dashboard completed")
             }
             is LoginState.Error -> {
-                // Show error message
+                Log.e("LoginScreen", "Login error: ${loginState.message}")
             }
-            else -> {}
+            is LoginState.Loading -> {
+                Log.d("LoginScreen", "Login in progress...")
+            }
+            else -> {
+                Log.d("LoginScreen", "Login state: $loginState")
+            }
         }
     }
     

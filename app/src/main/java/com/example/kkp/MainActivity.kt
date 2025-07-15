@@ -14,6 +14,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import android.util.Log
 import com.example.kkp.api.SessionManager
 import com.example.kkp.ui.screens.AssetScreen
 import com.example.kkp.ui.screens.DashboardScreen
@@ -50,7 +51,10 @@ fun KKPApp() {
     
     val navController = rememberNavController()
     
-    NavHost(navController = navController, startDestination = if (isLoggedIn) "dashboard" else "login") {
+    val startDestination = if (isLoggedIn) "dashboard" else "login"
+    Log.d("MainActivity", "isLoggedIn: $isLoggedIn, startDestination: $startDestination")
+    
+    NavHost(navController = navController, startDestination = startDestination) {
         composable("login") {
             LoginScreen(
                 authViewModel = authViewModel,

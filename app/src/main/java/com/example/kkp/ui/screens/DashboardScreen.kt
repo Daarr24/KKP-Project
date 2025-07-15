@@ -30,6 +30,7 @@ import com.example.kkp.ui.theme.KKPTheme
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.kkp.model.DashboardData
 import androidx.compose.runtime.LaunchedEffect
+import android.util.Log
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -48,8 +49,16 @@ fun DashboardScreen(
     val dashboardLoading by authViewModel.dashboardLoading.collectAsStateWithLifecycle()
     val dashboardError by authViewModel.dashboardError.collectAsStateWithLifecycle()
 
+    // Fetch dashboard data in background, don't block UI
     LaunchedEffect(Unit) {
-        authViewModel.fetchDashboard()
+        Log.d("DashboardScreen", "DashboardScreen loaded successfully!")
+        try {
+            Log.d("DashboardScreen", "Fetching dashboard data...")
+            authViewModel.fetchDashboard()
+        } catch (e: Exception) {
+            Log.e("DashboardScreen", "Error fetching dashboard: ${e.message}")
+            // Ignore error, allow UI to show without dashboard data
+        }
     }
     
     val menuItems = rememberMenuItems(
@@ -101,8 +110,14 @@ fun DashboardScreen(
                     modifier = Modifier.padding(24.dp)
                 ) {
                     Text(
-                        text = "Welcome back!",
+                        text = "✅ Dashboard Loaded Successfully!",
                         style = MaterialTheme.typography.headlineSmall,
+                        color = RedPrimary
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(
+                        text = "Welcome back!",
+                        style = MaterialTheme.typography.headlineMedium,
                         color = RedPrimary
                     )
                     Spacer(modifier = Modifier.height(4.dp))
@@ -118,39 +133,84 @@ fun DashboardScreen(
                     )
                 }
             }
-            // Statistik utama
-            if (dashboardLoading) {
-                Box(Modifier.fillMaxWidth().padding(24.dp), contentAlignment = Alignment.Center) {
-                    CircularProgressIndicator()
-                }
-            } else if (dashboardError != null) {
-                Box(Modifier.fillMaxWidth().padding(24.dp), contentAlignment = Alignment.Center) {
-                    Text(dashboardError ?: "Error", color = RedPrimary)
-                }
-            } else if (dashboardData != null) {
-                Row(
-                    Modifier.fillMaxWidth().padding(bottom = 16.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        Text("Total Asset", style = MaterialTheme.typography.titleMedium, color = RedPrimary)
-                        Text(dashboardData!!.totalAsset.toString(), style = MaterialTheme.typography.headlineMedium, color = Black)
+            // Statistik utama - selalu tampilkan, dengan data atau placeholder
+            when {
+                dashboardData != null -> {
+                    // Tampilkan data real
+                    Row(
+                        Modifier.fillMaxWidth().padding(bottom = 16.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                            Text("Total Asset", style = MaterialTheme.typography.titleMedium, color = RedPrimary)
+                            Text(dashboardData!!.totalAsset.toString(), style = MaterialTheme.typography.headlineMedium, color = Black)
+                        }
+                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                            Text("Total Rental", style = MaterialTheme.typography.titleMedium, color = BlueInfo)
+                            Text(dashboardData!!.totalRental.toString(), style = MaterialTheme.typography.headlineMedium, color = Black)
+                        }
+                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                            Text("Bulan", style = MaterialTheme.typography.titleMedium, color = NeonGreen)
+                            Text("${dashboardData!!.monthName} ${dashboardData!!.year}", style = MaterialTheme.typography.bodyLarge, color = Black)
+                        }
                     }
-                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        Text("Total Rental", style = MaterialTheme.typography.titleMedium, color = BlueInfo)
-                        Text(dashboardData!!.totalRental.toString(), style = MaterialTheme.typography.headlineMedium, color = Black)
-                    }
-                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                        Text("Bulan", style = MaterialTheme.typography.titleMedium, color = NeonGreen)
-                        Text("${dashboardData!!.monthName} ${dashboardData!!.year}", style = MaterialTheme.typography.bodyLarge, color = Black)
-                    }
+                    // Bar Chart
+                    BarChartSection(dashboardData!!)
+                    Spacer(Modifier.height(16.dp))
+                    // Pie Chart
+                    PieChartSection(dashboardData!!)
+                    Spacer(Modifier.height(16.dp))
                 }
-                // Bar Chart
-                BarChartSection(dashboardData!!)
-                Spacer(Modifier.height(16.dp))
-                // Pie Chart
-                PieChartSection(dashboardData!!)
-                Spacer(Modifier.height(16.dp))
+                dashboardLoading -> {
+                    // Tampilkan skeleton loading
+                    Row(
+                        Modifier.fillMaxWidth().padding(bottom = 16.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                            Text("Total Asset", style = MaterialTheme.typography.titleMedium, color = RedPrimary)
+                            CircularProgressIndicator(modifier = Modifier.size(24.dp), color = RedPrimary)
+                        }
+                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                            Text("Total Rental", style = MaterialTheme.typography.titleMedium, color = BlueInfo)
+                            CircularProgressIndicator(modifier = Modifier.size(24.dp), color = BlueInfo)
+                        }
+                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                            Text("Loading...", style = MaterialTheme.typography.titleMedium, color = NeonGreen)
+                            CircularProgressIndicator(modifier = Modifier.size(24.dp), color = NeonGreen)
+                        }
+                    }
+                    Spacer(Modifier.height(16.dp))
+                }
+                else -> {
+                    // Tampilkan placeholder atau error message tanpa memblokir UI
+                    Row(
+                        Modifier.fillMaxWidth().padding(bottom = 16.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                            Text("Total Asset", style = MaterialTheme.typography.titleMedium, color = RedPrimary)
+                            Text("--", style = MaterialTheme.typography.headlineMedium, color = GrayDark)
+                        }
+                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                            Text("Total Rental", style = MaterialTheme.typography.titleMedium, color = BlueInfo)
+                            Text("--", style = MaterialTheme.typography.headlineMedium, color = GrayDark)
+                        }
+                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                            Text("Dashboard", style = MaterialTheme.typography.titleMedium, color = NeonGreen)
+                            Text("Unavailable", style = MaterialTheme.typography.bodyLarge, color = GrayDark)
+                        }
+                    }
+                    if (dashboardError != null) {
+                        Text(
+                            text = "Dashboard data unavailable: ${dashboardError}",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = RedPrimary,
+                            modifier = Modifier.padding(bottom = 16.dp)
+                        )
+                    }
+                    Spacer(Modifier.height(16.dp))
+                }
             }
             // Menu Grid
             LazyVerticalGrid(

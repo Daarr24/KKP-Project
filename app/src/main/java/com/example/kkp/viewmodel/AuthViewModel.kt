@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withTimeout
 import com.example.kkp.model.DashboardData
 import com.example.kkp.model.DashboardResponse
 import com.example.kkp.api.NetworkModule
@@ -76,14 +77,20 @@ class AuthViewModel : ViewModel() {
             _dashboardLoading.value = true
             _dashboardError.value = null
             try {
-                val response = NetworkModule.apiService.getDashboard()
-                if (response.isSuccessful && response.body() != null) {
-                    _dashboardData.value = response.body()!!.data
-                } else {
-                    _dashboardError.value = response.body()?.message ?: "Failed to fetch dashboard"
+                // Add 10 second timeout to prevent hanging
+                withTimeout(10000L) {
+                    val response = NetworkModule.apiService.getDashboard()
+                    if (response.isSuccessful && response.body() != null) {
+                        _dashboardData.value = response.body()!!.data
+                    } else {
+                        _dashboardError.value = response.body()?.message ?: "Failed to fetch dashboard"
+                    }
                 }
             } catch (e: Exception) {
-                _dashboardError.value = e.message
+                _dashboardError.value = when {
+                    e.message?.contains("timeout", ignoreCase = true) == true -> "Dashboard loading timeout"
+                    else -> "Dashboard unavailable: ${e.message}"
+                }
             } finally {
                 _dashboardLoading.value = false
             }

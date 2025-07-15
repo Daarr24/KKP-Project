@@ -56,27 +56,9 @@ fun LoginScreen(
     val loginState by authViewModel.loginState.collectAsStateWithLifecycle()
     val context = LocalContext.current
     
-    // Handle navigation based on login state
+    // SAFE navigation handling - no smart cast issues
     LaunchedEffect(loginState) {
-        // Extract state to avoid smart cast issues
-        val currentState = loginState
-        
-        if (currentState is LoginState.Success) {
-            Log.d("LoginScreen", "Login successful, navigating to dashboard...")
-            // Reset state first to prevent re-triggering
-            authViewModel.resetLoginState()
-            // Then navigate
-            navController.navigate("dashboard") {
-                popUpTo("login") { inclusive = true }
-            }
-            Log.d("LoginScreen", "Navigation to dashboard completed")
-        } else if (currentState is LoginState.Error) {
-            Log.e("LoginScreen", "Login error: ${currentState.message}")
-        } else if (currentState is LoginState.Loading) {
-            Log.d("LoginScreen", "Login in progress...")
-        } else {
-            Log.d("LoginScreen", "Login state: $currentState")
-        }
+        handleLoginState(loginState, authViewModel, navController)
     }
     
     Column(
@@ -192,50 +174,101 @@ fun LoginScreen(
             )
         )
         
-        // Extract loading state to avoid smart cast
-        val isLoading = loginState is LoginState.Loading
-        val isButtonEnabled = email.isNotEmpty() && password.isNotEmpty() && !isLoading
-        
         // Login Button
-        Button(
-            onClick = {
-                if (email.isNotEmpty() && password.isNotEmpty()) {
-                    authViewModel.login(email, password)
-                }
-            },
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(56.dp),
-            enabled = isButtonEnabled,
-            colors = ButtonDefaults.buttonColors(containerColor = RedPrimary),
-            shape = RoundedCornerShape(16.dp),
-            elevation = ButtonDefaults.buttonElevation(defaultElevation = 6.dp)
-        ) {
-            if (isLoading) {
-                CircularProgressIndicator(
-                    modifier = Modifier.size(24.dp),
-                    color = White
-                )
-            } else {
-                Text(
-                    text = "Sign In",
-                    style = MaterialTheme.typography.labelLarge,
-                    color = White
-                )
-            }
-        }
+        LoginButton(
+            email = email,
+            password = password,
+            loginState = loginState,
+            onLoginClick = { authViewModel.login(email, password) }
+        )
         
-        // Error Message - extract error message to avoid smart cast
-        val currentState = loginState
-        if (currentState is LoginState.Error) {
-            val errorMessage = currentState.message
+        // Error Message
+        LoginErrorMessage(loginState = loginState)
+    }
+}
+
+// Separate function to handle login state - avoids smart cast issues
+private fun handleLoginState(
+    state: LoginState,
+    authViewModel: AuthViewModel,
+    navController: NavController
+) {
+    when (state) {
+        is LoginState.Success -> {
+            Log.d("LoginScreen", "Login successful, navigating to dashboard...")
+            authViewModel.resetLoginState()
+            navController.navigate("dashboard") {
+                popUpTo("login") { inclusive = true }
+            }
+            Log.d("LoginScreen", "Navigation to dashboard completed")
+        }
+        is LoginState.Error -> {
+            Log.e("LoginScreen", "Login error: ${state.message}")
+        }
+        is LoginState.Loading -> {
+            Log.d("LoginScreen", "Login in progress...")
+        }
+        else -> {
+            Log.d("LoginScreen", "Login state: $state")
+        }
+    }
+}
+
+// Separate composable for login button
+@Composable
+private fun LoginButton(
+    email: String,
+    password: String,
+    loginState: LoginState,
+    onLoginClick: () -> Unit
+) {
+    val isLoading = loginState is LoginState.Loading
+    val isEnabled = email.isNotEmpty() && password.isNotEmpty() && !isLoading
+    
+    Button(
+        onClick = {
+            if (email.isNotEmpty() && password.isNotEmpty()) {
+                onLoginClick()
+            }
+        },
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(56.dp),
+        enabled = isEnabled,
+        colors = ButtonDefaults.buttonColors(containerColor = RedPrimary),
+        shape = RoundedCornerShape(16.dp),
+        elevation = ButtonDefaults.buttonElevation(defaultElevation = 6.dp)
+    ) {
+        if (isLoading) {
+            CircularProgressIndicator(
+                modifier = Modifier.size(24.dp),
+                color = White
+            )
+        } else {
             Text(
-                text = errorMessage,
+                text = "Sign In",
+                style = MaterialTheme.typography.labelLarge,
+                color = White
+            )
+        }
+    }
+}
+
+// Separate composable for error message
+@Composable
+private fun LoginErrorMessage(loginState: LoginState) {
+    when (loginState) {
+        is LoginState.Error -> {
+            Text(
+                text = loginState.message,
                 color = RedPrimary,
                 style = MaterialTheme.typography.bodyMedium,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.padding(top = 16.dp)
             )
+        }
+        else -> {
+            // No error to display
         }
     }
 }
